@@ -1,0 +1,63 @@
+﻿@model IEnumerable<ProjectManagement2.Task>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskStartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskEndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaskType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Project.ProjectName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Report.ReportName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaskName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaskStartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaskEndDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TaskType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Project.ProjectName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Report.ReportName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.TaskID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.TaskID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.TaskID })
+        </td>
+    </tr>
+}
+
+</table>

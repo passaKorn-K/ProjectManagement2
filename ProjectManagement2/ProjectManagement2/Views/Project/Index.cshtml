@@ -1,0 +1,267 @@
+﻿@*@model IEnumerable<ReportManagement.Project>*@
+@model ProjectManagement2.ViewModel.ProjectSummary
+
+
+@{
+    ViewBag.Title = "Project Summary";
+    string position = ViewBag.Position;
+    int pid = ViewBag.ProjectID;
+    int rid = ViewBag.ReportID;
+
+}
+@*<link rel="stylesheet" type="text/css" href="~/Content/style.css" />*@
+<h2>PROJECT MANAGEMENT</h2>
+@if (position.Equals("Project Manager"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
+else
+{
+    <p>
+        @Html.ActionLink("Create New", "Create", "Report")
+    </p>
+}
+
+<table class="table">
+    <tr>
+        <th>Project</th>
+        <th>Project Status</th>
+        <th>Project Start Date</th>
+        <th>Project End Date</th>
+        <th>Project Member</th>
+    </tr>
+
+    @foreach (var item in Model.Projects)
+    {
+        string selectedRow = "";
+        if (item.ProjectID == ViewBag.ProjectID)
+        {
+            selectedRow = "success";
+        }
+
+        <tr class="@selectedRow">
+            <td>
+                @Html.ActionLink(item.ProjectName, "Index", new { id = item.ProjectID })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectStartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectEndDate)
+            </td>
+            @*<td>
+                    @{
+                        foreach (var report in item.Reports)
+                        {
+                            @report.ReportName @: @report.Status <br />
+                        }
+                    }
+                </td>*@
+            @if (!position.Equals("null") && item.ProjectID == pid)
+            {
+            <td>@position</td>
+            }
+            <td align="center">
+
+                @if (position.Equals("Project Manager") && pid == item.ProjectID)
+                {
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-th-list">  Manage</span>
+                        </button>
+                        <ul class="dropdown-menu">
+
+                            <li>@Html.ActionLink("Create Report", "Create", "Report", new { id = item.ProjectID }, null)</li>
+
+                            <li>@Html.ActionLink("Edit Project", "Edit", new { id = item.ProjectID })</li>
+                            <li>@Html.ActionLink("Project Details", "Details", new { id = item.ProjectID }) </li>
+                            <li>@Html.ActionLink("Delete Project", "Delete", new { id = item.ProjectID }, new { onclick = "return confirm('Confirm Delete?');" })</li>
+                        </ul>
+                    </div>
+                }
+                else if (pid == item.ProjectID)
+                {
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-th-list">  Manage</span>
+                        </button>
+                        <ul class="dropdown-menu">
+
+                            <li>@Html.ActionLink("Project Details", "Details", new { id = item.ProjectID })</li>
+
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                }
+
+            </td>
+        </tr>
+    }
+</table>
+
+@if (Model.Reports != null)
+{
+    @*@Html.ActionLink("Create New Report", "Create", "Report")*@
+
+    <h3>Report Related With Project</h3>
+    <table class="table">
+        <tr>
+            <th>Report Name</th>
+            <th>Report Status</th>
+            <th>Report Created Date</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Reports)
+        {
+            string selectedRow = "";
+            if (item.ReportID == ViewBag.ReportID)
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.ActionLink(@item.ReportName, "Index", new { reportID = item.ReportID })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td>
+                    @*@switch (position)
+                        {
+                            case "Director":*@
+                    @if (position.Equals("Director") && rid == item.ReportID)
+                    {
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-th-list">  Manage</span>
+                            </button>
+                            <ul class="dropdown-menu">
+
+                                <li>@Html.ActionLink("Approve Report", "Approve", "Action", new { id = item.ReportID }, null)</li>
+                                <li>@Html.ActionLink("Reject Report", "Reject", "Action", new { id = item.ReportID }, null)</li>
+                                <li>@Html.ActionLink("Create Opinion", "Create", "Opinion", new { id = item.ReportID }, null)</li>
+                                <li>@Html.ActionLink("Report Details", "Details", "Report", new { id = item.ReportID }, null) </li>
+                            </ul>
+                        </div>
+                    }
+                    @*break;
+                        case "Project Reviewer":*@
+                    else if (position.Equals("Project Reviewer") && rid == item.ReportID)
+                    {
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-th-list">  Manage</span>
+                            </button>
+                            <ul class="dropdown-menu">
+
+                                <li>@Html.ActionLink("Review Report", "Review", "Action", new { id = item.ReportID }, null)</li>
+                                <li>@Html.ActionLink("Create Opinion", "Create", "Opinion", new { id = item.ReportID }, null)</li>
+                                <li>@Html.ActionLink("Report Details", "Details", "Report", new { id = item.ReportID }, null) </li>
+                            </ul>
+                        </div>
+                    }
+                    else if (rid == item.ReportID)
+                    {
+                            @*break;
+                                default: // Project manager*@
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-th-list">  Manage</span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Report Details", "Details", "Report", new { id = item.ReportID }, null) </li>
+                                </ul>
+                            </div>
+                    }
+                    else { }
+                            @*break;
+                                }*@
+                        </td>
+                    </tr>
+        }
+    </table>
+}
+
+@if (Model.Opinions != null)
+{
+    @*@Html.ActionLink("Create New Opinion", "Create", "Opinion")*@
+    <h3>
+        Opinion Created in Report
+    </h3>
+    <table class="table">
+        <tr>
+            <th>Opinion</th>
+            <th>Created By</th>
+            <th>Position</th>
+            <th>Created Date</th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.Opinions)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Opinion1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Member.User.FirstName) @Html.DisplayFor(modelItem => item.Member.User.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelitem => item.Member.MemberPosition)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    @switch (position)
+                    {
+                        case "Director":
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-th-list">  Manage</span>
+                                </button>
+                                <ul class="dropdown-menu">
+
+                                    <li>@Html.ActionLink("Edit Opinion", "Edit", "Opinion", new { id = item.ReportID }, null)</li>
+                                    <li>@Html.ActionLink("Delete Opinion", "Delete", "Opinion", new { id = item.ReportID }, new { onclick = "return confirm('Confirm Delete?');" }) </li>
+                                </ul>
+                            </div>
+                            break;
+                        case "Project Reviewer":
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                    <span class="glyphicon glyphicon-th-list">  Manage</span>
+                                </button>
+                                <ul class="dropdown-menu">
+
+                                    <li>@Html.ActionLink("Edit Opinion", "Edit", "Opinion", new { id = item.ReportID }, null)</li>
+                                    <li>@Html.ActionLink("Delete Opinion", "Delete", "Opinion", new { id = item.ReportID }, new { onclick = "return confirm('Confirm Delete?');" }) </li>
+                                </ul>
+                            </div>
+                            break;
+                        default: // Project manager
+                            break;
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        })
+    </script>
+}

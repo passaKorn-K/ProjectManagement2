@@ -1,0 +1,39 @@
+﻿@model ProjectManagement2.Action
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Action</h4>
+        <hr />
+
+        @Html.HiddenFor(m => m.ActionID)
+        @Html.HiddenFor(m => m.ReportID)
+        @Html.HiddenFor(m => m.ActionName)
+        @Html.HiddenFor(m => m.MemberID)
+        @Html.HiddenFor(m => m.ActionDate)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}  
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

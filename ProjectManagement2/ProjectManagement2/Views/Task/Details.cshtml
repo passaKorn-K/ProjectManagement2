@@ -1,0 +1,66 @@
+﻿@model ProjectManagement2.Task
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Task</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TaskName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaskName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TaskStartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaskStartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TaskEndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaskEndDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TaskType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaskType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.ProjectName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Project.ProjectName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Report.ReportName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Report.ReportName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TaskID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

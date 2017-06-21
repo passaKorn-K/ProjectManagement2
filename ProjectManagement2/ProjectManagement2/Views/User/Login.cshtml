@@ -1,0 +1,81 @@
+﻿@model ProjectManagement2.User
+
+@{
+    ViewBag.Title = "Login";
+}
+
+@using (Html.BeginForm("Login", "User", FormMethod.Post))
+{
+    <fieldset>
+        <legend> Login </legend>
+        <div id="loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="lading"></div>
+        </div>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        @if (@ViewBag.Message != null)
+        {
+            <div style="border: 1px solid red">
+                @ViewBag.Message
+            </div>
+        }
+        <table>
+            <tr>
+                <td>@Html.LabelFor(a => a.Username)</td>
+                <td>@Html.TextBoxFor(a => a.Username)</td>
+                <td>@Html.ValidationMessageFor(a => a.Username)</td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(a => a.Password)
+                </td>
+                <td>
+                    @Html.PasswordFor(a => a.Password)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(a => a.Password)
+                </td>
+            </tr>
+            @*<tr>
+                    <td>
+                        @Html.LabelFor(a => a.Position)
+                    </td>
+                    <td>
+                        @Html.DropDownList("Position")
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(a => a.Position, "", new { @class = "text-danger" })
+                    </td>
+                </tr>*@
+
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Login" />
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </fieldset>
+}
+@section scripts {
+
+    <script>
+        $document.ready(function(){
+
+            setTimeout(function(){
+                $("#loader").show();
+            }, 2000);
+        });
+
+    </script>
+
+}

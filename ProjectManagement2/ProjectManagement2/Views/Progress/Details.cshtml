@@ -1,0 +1,42 @@
+﻿@model ProjectManagement2.Progress
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Progress</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProgressDetail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProgressDetail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.ProjectName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Project.ProjectName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Report.ReportName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Report.ReportName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ProgressID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

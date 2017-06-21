@@ -1,0 +1,793 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ReportManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Action">
+          <Key>
+            <PropertyRef Name="ActionID" />
+          </Key>
+          <Property Name="ActionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ActionName" Type="varchar(max)" Nullable="false" />
+          <Property Name="MemberID" Type="int" />
+          <Property Name="ActionDate" Type="datetime2" Precision="7" />
+          <Property Name="ReportID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MemberID" />
+          </Key>
+          <Property Name="MemberID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberPosition" Type="varchar(max)" />
+          <Property Name="Wages" Type="float" />
+          <Property Name="WorkingHour" Type="float" />
+          <Property Name="TotalWages" Type="float" />
+          <Property Name="ProjectID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Opinion">
+          <Key>
+            <PropertyRef Name="OpinionID" />
+          </Key>
+          <Property Name="OpinionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReportID" Type="int" Nullable="false" />
+          <Property Name="MemberID" Type="int" />
+          <Property Name="DateCreated" Type="datetime2" Precision="7" />
+          <Property Name="Opinion" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Progress">
+          <Key>
+            <PropertyRef Name="ProgressID" />
+          </Key>
+          <Property Name="ProgressID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProgressDetail" Type="varchar(max)" />
+          <Property Name="ProjectID" Type="int" Nullable="false" />
+          <Property Name="ReportID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ProjectID" />
+          </Key>
+          <Property Name="ProjectID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProjectName" Type="varchar(max)" Nullable="false" />
+          <Property Name="ProjectStatus" Type="varchar" MaxLength="50" />
+          <Property Name="ProjectStartDate" Type="datetime2" Precision="7" />
+          <Property Name="ProjectEndDate" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReportName" Type="varchar(max)" Nullable="false" />
+          <Property Name="Status" Type="varchar(max)" />
+          <Property Name="ProjectID" Type="int" />
+          <Property Name="CreatedDate" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="Result">
+          <Key>
+            <PropertyRef Name="ResultID" />
+          </Key>
+          <Property Name="ResultID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResultItem" Type="varchar(max)" />
+          <Property Name="ProjectID" Type="int" Nullable="false" />
+          <Property Name="ReportID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="TaskID" />
+          </Key>
+          <Property Name="TaskID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskName" Type="varchar(max)" />
+          <Property Name="TaskStartDate" Type="datetime2" Precision="7" />
+          <Property Name="TaskEndDate" Type="datetime2" Precision="7" />
+          <Property Name="TaskType" Type="varchar(max)" />
+          <Property Name="ProjectID" Type="int" Nullable="false" />
+          <Property Name="ReportID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar(max)" />
+          <Property Name="LastName" Type="varchar(max)" />
+          <Property Name="Password" Type="varchar(max)" />
+          <Property Name="Username" Type="varchar(max)" />
+          <Property Name="Email" Type="varchar(max)" />
+        </EntityType>
+        <Association Name="FK_Action_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+          <End Role="Action" Type="Self.Action" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="Action">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Action_Report">
+          <End Role="Report" Type="Self.Report" Multiplicity="1" />
+          <End Role="Action" Type="Self.Action" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportID" />
+            </Principal>
+            <Dependent Role="Action">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Member_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Member_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Opinion_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+          <End Role="Opinion" Type="Self.Opinion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="Opinion">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Opinion_Report">
+          <End Role="Report" Type="Self.Report" Multiplicity="1" />
+          <End Role="Opinion" Type="Self.Opinion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportID" />
+            </Principal>
+            <Dependent Role="Opinion">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Progress_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="1" />
+          <End Role="Progress" Type="Self.Progress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="Progress">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Progress_Report">
+          <End Role="Report" Type="Self.Report" Multiplicity="1" />
+          <End Role="Progress" Type="Self.Progress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportID" />
+            </Principal>
+            <Dependent Role="Progress">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Report_Report">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Result_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="1" />
+          <End Role="Result" Type="Self.Result" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="Result">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Result_Report">
+          <End Role="Report" Type="Self.Report" Multiplicity="1" />
+          <End Role="Result" Type="Self.Result" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportID" />
+            </Principal>
+            <Dependent Role="Result">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="1" />
+          <End Role="Task" Type="Self.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_Report">
+          <End Role="Report" Type="Self.Report" Multiplicity="1" />
+          <End Role="Task" Type="Self.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportID" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ReportManagementModelStoreContainer">
+          <EntitySet Name="Action" EntityType="Self.Action" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Member" EntityType="Self.Member" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Opinion" EntityType="Self.Opinion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Progress" EntityType="Self.Progress" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Result" EntityType="Self.Result" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Action_Member" Association="Self.FK_Action_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="Action" EntitySet="Action" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Action_Report" Association="Self.FK_Action_Report">
+            <End Role="Report" EntitySet="Report" />
+            <End Role="Action" EntitySet="Action" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Member_Project" Association="Self.FK_Member_Project">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Member" EntitySet="Member" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Member_User" Association="Self.FK_Member_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Member" EntitySet="Member" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Opinion_Member" Association="Self.FK_Opinion_Member">
+            <End Role="Member" EntitySet="Member" />
+            <End Role="Opinion" EntitySet="Opinion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Opinion_Report" Association="Self.FK_Opinion_Report">
+            <End Role="Report" EntitySet="Report" />
+            <End Role="Opinion" EntitySet="Opinion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Progress_Project" Association="Self.FK_Progress_Project">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Progress" EntitySet="Progress" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Progress_Report" Association="Self.FK_Progress_Report">
+            <End Role="Report" EntitySet="Report" />
+            <End Role="Progress" EntitySet="Progress" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Report_Report" Association="Self.FK_Report_Report">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Result_Project" Association="Self.FK_Result_Project">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Result" EntitySet="Result" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Result_Report" Association="Self.FK_Result_Report">
+            <End Role="Report" EntitySet="Report" />
+            <End Role="Result" EntitySet="Result" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_Project" Association="Self.FK_Task_Project">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_Report" Association="Self.FK_Task_Report">
+            <End Role="Report" EntitySet="Report" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ReportManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Action">
+          <Key>
+            <PropertyRef Name="ActionID" />
+          </Key>
+          <Property Name="ActionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActionName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MemberID" Type="Int32" />
+          <Property Name="ActionDate" Type="DateTime" Precision="7" />
+          <Property Name="ReportID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Member" Relationship="Self.FK_Action_Member" FromRole="Action" ToRole="Member" />
+          <NavigationProperty Name="Report" Relationship="Self.FK_Action_Report" FromRole="Action" ToRole="Report" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="MemberID" />
+          </Key>
+          <Property Name="MemberID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberPosition" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Wages" Type="Double" />
+          <Property Name="WorkingHour" Type="Double" />
+          <Property Name="TotalWages" Type="Double" />
+          <Property Name="ProjectID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Actions" Relationship="Self.FK_Action_Member" FromRole="Member" ToRole="Action" />
+          <NavigationProperty Name="Project" Relationship="Self.FK_Member_Project" FromRole="Member" ToRole="Project" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Member_User" FromRole="Member" ToRole="User" />
+          <NavigationProperty Name="Opinions" Relationship="Self.FK_Opinion_Member" FromRole="Member" ToRole="Opinion" />
+        </EntityType>
+        <EntityType Name="Opinion">
+          <Key>
+            <PropertyRef Name="OpinionID" />
+          </Key>
+          <Property Name="OpinionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReportID" Type="Int32" Nullable="false" />
+          <Property Name="MemberID" Type="Int32" />
+          <Property Name="DateCreated" Type="DateTime" Precision="7" />
+          <Property Name="Opinion1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Member" Relationship="Self.FK_Opinion_Member" FromRole="Opinion" ToRole="Member" />
+          <NavigationProperty Name="Report" Relationship="Self.FK_Opinion_Report" FromRole="Opinion" ToRole="Report" />
+        </EntityType>
+        <EntityType Name="Progress">
+          <Key>
+            <PropertyRef Name="ProgressID" />
+          </Key>
+          <Property Name="ProgressID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProgressDetail" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Project" Relationship="Self.FK_Progress_Project" FromRole="Progress" ToRole="Project" />
+          <Property Name="ReportID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Report" Relationship="ReportManagementModel.FK_Progress_Report" FromRole="Progress" ToRole="Report" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ProjectID" />
+          </Key>
+          <Property Name="ProjectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProjectStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectStartDate" Type="DateTime" Precision="7" />
+          <Property Name="ProjectEndDate" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Members" Relationship="Self.FK_Member_Project" FromRole="Project" ToRole="Member" />
+          <NavigationProperty Name="Progresses" Relationship="Self.FK_Progress_Project" FromRole="Project" ToRole="Progress" />
+          <NavigationProperty Name="Reports" Relationship="Self.FK_Report_Report" FromRole="Project" ToRole="Report" />
+          <NavigationProperty Name="Results" Relationship="Self.FK_Result_Project" FromRole="Project" ToRole="Result" />
+          <NavigationProperty Name="Tasks" Relationship="Self.FK_Task_Project" FromRole="Project" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="ReportID" />
+          </Key>
+          <Property Name="ReportID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReportName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectID" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Actions" Relationship="Self.FK_Action_Report" FromRole="Report" ToRole="Action" />
+          <NavigationProperty Name="Opinions" Relationship="Self.FK_Opinion_Report" FromRole="Report" ToRole="Opinion" />
+          <NavigationProperty Name="Project" Relationship="Self.FK_Report_Report" FromRole="Report" ToRole="Project" />
+          <NavigationProperty Name="Progresses" Relationship="ReportManagementModel.FK_Progress_Report" FromRole="Report" ToRole="Progress" />
+          <NavigationProperty Name="Results" Relationship="ReportManagementModel.FK_Result_Report" FromRole="Report" ToRole="Result" />
+          <NavigationProperty Name="Tasks" Relationship="ReportManagementModel.FK_Task_Report" FromRole="Report" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="Result">
+          <Key>
+            <PropertyRef Name="ResultID" />
+          </Key>
+          <Property Name="ResultID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ResultItem" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Project" Relationship="Self.FK_Result_Project" FromRole="Result" ToRole="Project" />
+          <Property Name="ReportID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Report" Relationship="ReportManagementModel.FK_Result_Report" FromRole="Result" ToRole="Report" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="TaskID" />
+          </Key>
+          <Property Name="TaskID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="TaskStartDate" Type="DateTime" Precision="7" />
+          <Property Name="TaskEndDate" Type="DateTime" Precision="7" />
+          <Property Name="TaskType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Project" Relationship="Self.FK_Task_Project" FromRole="Task" ToRole="Project" />
+          <Property Name="ReportID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Report" Relationship="ReportManagementModel.FK_Task_Report" FromRole="Task" ToRole="Report" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Members" Relationship="Self.FK_Member_User" FromRole="User" ToRole="Member" />
+        </EntityType>
+        <Association Name="FK_Action_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+          <End Role="Action" Type="Self.Action" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="Action">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Action_Report">
+          <End Role="Report" Type="Self.Report" Multiplicity="1" />
+          <End Role="Action" Type="Self.Action" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportID" />
+            </Principal>
+            <Dependent Role="Action">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Member_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Member_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Member" Type="Self.Member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Member">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Opinion_Member">
+          <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
+          <End Role="Opinion" Type="Self.Opinion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Member">
+              <PropertyRef Name="MemberID" />
+            </Principal>
+            <Dependent Role="Opinion">
+              <PropertyRef Name="MemberID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Opinion_Report">
+          <End Role="Report" Type="Self.Report" Multiplicity="1" />
+          <End Role="Opinion" Type="Self.Opinion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportID" />
+            </Principal>
+            <Dependent Role="Opinion">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Progress_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="1" />
+          <End Role="Progress" Type="Self.Progress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="Progress">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Report_Report">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Result_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="1" />
+          <End Role="Result" Type="Self.Result" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="Result">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="1" />
+          <End Role="Task" Type="Self.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ReportManagementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Actions" EntityType="Self.Action" />
+          <EntitySet Name="Members" EntityType="Self.Member" />
+          <EntitySet Name="Opinions" EntityType="Self.Opinion" />
+          <EntitySet Name="Progresses" EntityType="Self.Progress" />
+          <EntitySet Name="Projects" EntityType="Self.Project" />
+          <EntitySet Name="Reports" EntityType="Self.Report" />
+          <EntitySet Name="Results" EntityType="Self.Result" />
+          <EntitySet Name="Tasks" EntityType="Self.Task" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Action_Member" Association="Self.FK_Action_Member">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="Action" EntitySet="Actions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Action_Report" Association="Self.FK_Action_Report">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="Action" EntitySet="Actions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Member_Project" Association="Self.FK_Member_Project">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Member" EntitySet="Members" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Member_User" Association="Self.FK_Member_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Member" EntitySet="Members" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Opinion_Member" Association="Self.FK_Opinion_Member">
+            <End Role="Member" EntitySet="Members" />
+            <End Role="Opinion" EntitySet="Opinions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Opinion_Report" Association="Self.FK_Opinion_Report">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="Opinion" EntitySet="Opinions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Progress_Project" Association="Self.FK_Progress_Project">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Progress" EntitySet="Progresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Report_Report" Association="Self.FK_Report_Report">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Result_Project" Association="Self.FK_Result_Project">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Result" EntitySet="Results" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_Project" Association="Self.FK_Task_Project">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Progress_Report" Association="ReportManagementModel.FK_Progress_Report">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="Progress" EntitySet="Progresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Result_Report" Association="ReportManagementModel.FK_Result_Report">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="Result" EntitySet="Results" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_Report" Association="ReportManagementModel.FK_Task_Report">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK_Progress_Report">
+          <End Type="ReportManagementModel.Report" Role="Report" Multiplicity="1" />
+          <End Type="ReportManagementModel.Progress" Role="Progress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportID" />
+            </Principal>
+            <Dependent Role="Progress">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Result_Report">
+          <End Type="ReportManagementModel.Report" Role="Report" Multiplicity="1" />
+          <End Type="ReportManagementModel.Result" Role="Result" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportID" />
+            </Principal>
+            <Dependent Role="Result">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_Report">
+          <End Type="ReportManagementModel.Report" Role="Report" Multiplicity="1" />
+          <End Type="ReportManagementModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportID" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ReportManagementModelStoreContainer" CdmEntityContainer="ReportManagementEntities">
+          <EntitySetMapping Name="Actions">
+            <EntityTypeMapping TypeName="ReportManagementModel.Action">
+              <MappingFragment StoreEntitySet="Action">
+                <ScalarProperty Name="ActionID" ColumnName="ActionID" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Members">
+            <EntityTypeMapping TypeName="ReportManagementModel.Member">
+              <MappingFragment StoreEntitySet="Member">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="MemberPosition" ColumnName="MemberPosition" />
+                <ScalarProperty Name="Wages" ColumnName="Wages" />
+                <ScalarProperty Name="WorkingHour" ColumnName="WorkingHour" />
+                <ScalarProperty Name="TotalWages" ColumnName="TotalWages" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Opinions">
+            <EntityTypeMapping TypeName="ReportManagementModel.Opinion">
+              <MappingFragment StoreEntitySet="Opinion">
+                <ScalarProperty Name="OpinionID" ColumnName="OpinionID" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Opinion1" ColumnName="Opinion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Progresses">
+            <EntityTypeMapping TypeName="ReportManagementModel.Progress">
+              <MappingFragment StoreEntitySet="Progress">
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="ProgressID" ColumnName="ProgressID" />
+                <ScalarProperty Name="ProgressDetail" ColumnName="ProgressDetail" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="ReportManagementModel.Project">
+              <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="ProjectStatus" ColumnName="ProjectStatus" />
+                <ScalarProperty Name="ProjectStartDate" ColumnName="ProjectStartDate" />
+                <ScalarProperty Name="ProjectEndDate" ColumnName="ProjectEndDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reports">
+            <EntityTypeMapping TypeName="ReportManagementModel.Report">
+              <MappingFragment StoreEntitySet="Report">
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Results">
+            <EntityTypeMapping TypeName="ReportManagementModel.Result">
+              <MappingFragment StoreEntitySet="Result">
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="ResultItem" ColumnName="ResultItem" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tasks">
+            <EntityTypeMapping TypeName="ReportManagementModel.Task">
+              <MappingFragment StoreEntitySet="Task">
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+                <ScalarProperty Name="TaskStartDate" ColumnName="TaskStartDate" />
+                <ScalarProperty Name="TaskEndDate" ColumnName="TaskEndDate" />
+                <ScalarProperty Name="TaskType" ColumnName="TaskType" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ReportManagementModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

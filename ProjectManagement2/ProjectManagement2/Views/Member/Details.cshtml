@@ -1,0 +1,66 @@
+﻿@model ProjectManagement2.Member
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Member</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MemberPosition)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MemberPosition)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Wages)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Wages)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkingHour)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkingHour)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalWages)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalWages)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.ProjectName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Project.ProjectName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.FirstName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MemberID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -25,7 +25,10 @@ namespace ProjectManagement2
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/btn3d.css",
+                      "~/Content/loginForm.css",
+                      "~/Content/loader.css"));
         }
     }
 }

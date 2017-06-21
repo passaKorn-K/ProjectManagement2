@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ProjectManagement2.Progress>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ProgressDetail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Project.ProjectName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Report.ReportName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProgressDetail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Project.ProjectName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Report.ReportName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ProgressID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ProgressID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ProgressID })
+        </td>
+    </tr>
+}
+
+</table>
