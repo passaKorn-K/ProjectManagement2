@@ -37,18 +37,15 @@ namespace ProjectManagement2.Controllers
         }
 
         // GET: Member/Create
-        public ActionResult Create(int pid)
+        public ActionResult Create(int pid, int rid)
         {
             //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName");
-            //ViewBag.UserID = new SelectList(db.Users, "UserID", "FirstName");
-
-            //var positionSelected = ViewBag.Position;
-
-            //var members = db.Members.Where(a => a.MemberPosition == positionSelected);
+            ViewBag.UserID = new SelectList(db.Users, "UserID", "FullName");
+            ViewBag.ReportID = rid;
 
             Member member = new Member()
             {
-                ProjectID = pid,
+                ProjectID = pid
             };
 
             return View(member);
@@ -61,11 +58,12 @@ namespace ProjectManagement2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "MemberID,MemberPosition,Wages,WorkingHour,TotalWages,ProjectID,UserID")] Member member)
         {
+            int rid = ViewBag.ReportID;
             if (ModelState.IsValid)
             {
                 db.Members.Add(member);
                 db.SaveChanges();
-                return RedirectToAction("Detail", "Report");
+                return RedirectToAction("Detail", "Report", new { id = rid });
             }
 
             //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", member.ProjectID);

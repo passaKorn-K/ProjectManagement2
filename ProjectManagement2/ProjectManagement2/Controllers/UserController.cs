@@ -14,6 +14,7 @@ namespace ProjectManagement2.Controllers
     {
         private ReportManagementEntities db = new ReportManagementEntities();
 
+
         public ActionResult Login()
         {
 
@@ -58,7 +59,7 @@ namespace ProjectManagement2.Controllers
             return View(db.Users.ToList());
         }
 
-        // GET: User/Details/5 
+        // GET: User/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -84,8 +85,9 @@ namespace ProjectManagement2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UserID,FirstName,LastName,Password,Username,Email")] User user)
+        public ActionResult Create([Bind(Include = "UserID,FirstName,LastName,Password,Username,Email,FullName")] User user)
         {
+            user.FullName = user.FirstName + user.LastName;
             if (ModelState.IsValid)
             {
                 db.Users.Add(user);

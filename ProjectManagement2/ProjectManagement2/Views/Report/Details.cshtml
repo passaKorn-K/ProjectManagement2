@@ -4,7 +4,7 @@
     ViewBag.Title = "Details";
     var userID = Session["UserID"];
     var date = DateTime.Now;
-    var position = Session["Position"].ToString();
+    string position = ViewBag.Position;
 }
 
 <h2>Details</h2>
@@ -93,7 +93,7 @@
         <tr>
             <th>
                 Member
-                @Html.ActionLink("+", "Create", "Member", new { pid = Model.ProjectID }, new { @class = "btn btn-success btn-xs btn3d" })
+                @Html.ActionLink("+", "Create", "Member", new { pid = Model.ProjectID, rid = Model.ReportID}, new { @class = "btn btn-success btn-xs btn3d" })
             </th>
             <th>Wages</th>
             <th>Working Hours</th>

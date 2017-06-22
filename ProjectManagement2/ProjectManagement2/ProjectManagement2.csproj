@@ -319,11 +319,6 @@
     <Content Include="Views\Opinion\Details.cshtml" />
     <Content Include="Views\Opinion\Edit.cshtml" />
     <Content Include="Views\Opinion\Index.cshtml" />
-    <Content Include="Views\User\Create.cshtml" />
-    <Content Include="Views\User\Delete.cshtml" />
-    <Content Include="Views\User\Details.cshtml" />
-    <Content Include="Views\User\Edit.cshtml" />
-    <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\Action\Approve.cshtml" />
@@ -342,6 +337,11 @@
     <Content Include="Views\Result\Details.cshtml" />
     <Content Include="Views\Result\Edit.cshtml" />
     <Content Include="Views\Result\Index.cshtml" />
+    <Content Include="Views\User\Create.cshtml" />
+    <Content Include="Views\User\Delete.cshtml" />
+    <Content Include="Views\User\Details.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

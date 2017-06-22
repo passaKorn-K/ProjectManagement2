@@ -97,6 +97,7 @@
           <Property Name="Password" Type="varchar(max)" />
           <Property Name="Username" Type="varchar(max)" />
           <Property Name="Email" Type="varchar(max)" />
+          <Property Name="FullName" Type="varchar(max)" />
         </EntityType>
         <Association Name="FK_Action_Member">
           <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
@@ -439,6 +440,7 @@
           <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Members" Relationship="Self.FK_Member_User" FromRole="User" ToRole="Member" />
+          <Property Name="FullName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_Action_Member">
           <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
@@ -758,6 +760,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="ReportManagementModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />

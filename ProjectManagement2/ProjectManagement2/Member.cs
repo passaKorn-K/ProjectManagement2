@@ -11,19 +11,7 @@ namespace ProjectManagement2
 {
     using System;
     using System.Collections.Generic;
-    using System.Web.Mvc;
-
-    //public enum MemberPositions
-    //{
-    //    Director,
-    //    Project_Reviewer,
-    //    Project_Manager,
-    //    Quality_Assurance,
-    //    Senior_Developer,
-    //    Junior_Developer
-
-    //}
-
+    
     public partial class Member
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -32,19 +20,7 @@ namespace ProjectManagement2
             this.Actions = new HashSet<Action>();
             this.Opinions = new HashSet<Opinion>();
         }
-
-        //public List<SelectListItem> allPositions()
-        //{
-        //    List<SelectListItem> choices = new List<SelectListItem>();
-        //    foreach(string c in Enum.GetValues(typeof(MemberPositions)))
-        //    {
-        //        choices.Add(new SelectListItem() { Text = c, Value = bool.TrueString });
-        //    }
-
-        //    return choices;
-        //}
-
- 
+    
         public int MemberID { get; set; }
         public string MemberPosition { get; set; }
         public Nullable<double> Wages { get; set; }
@@ -52,7 +28,6 @@ namespace ProjectManagement2
         public Nullable<double> TotalWages { get; set; }
         public int ProjectID { get; set; }
         public int UserID { get; set; }
-        
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Action> Actions { get; set; }

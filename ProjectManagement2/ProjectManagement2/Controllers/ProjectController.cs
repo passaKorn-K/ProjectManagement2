@@ -31,7 +31,7 @@ namespace ProjectManagement2.Controllers
                                     //.Include(i => i.Members)
                                     .OrderBy(i => i.ProjectName);
 
-
+                
                 if (id != null)
                 {
                     String position = db.Members.Where(a => a.ProjectID == id && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
