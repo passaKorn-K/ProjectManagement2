@@ -23,6 +23,7 @@ namespace ProjectManagement2.Controllers
         public ActionResult Index(int? id, int? reportID)
         {
             var uid = Convert.ToInt32(Session["UserID"]);
+            ViewBag.UserID = uid;
             if (Session["UserID"] != null)
             {
                 var viewModel = new ProjectSummary();
@@ -34,12 +35,28 @@ namespace ProjectManagement2.Controllers
                 
                 if (id != null)
                 {
-                    String position = db.Members.Where(a => a.ProjectID == id && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
+                    //Project must have member
+                    Member member = db.Members.Where(a => a.ProjectID == id).FirstOrDefault();
+                    if(member == null)
+                    {
+                        return RedirectToAction("Create", "Member", new { pid = id });
+                    }
+
+
+                    String position = db.Members.Where(a => a.ProjectID == id.Value && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
+                    if(position == null)
+                    {
+                        return RedirectToAction("Create", "Member", new { pid = id });
+
+                    }
+
+
                     ViewBag.Position = position;
-                    //String position = db.Members.Where(a => a.ProjectID == id && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
-                    //ViewBag.Position = position;
-                    ViewBag.ProjectID = id.Value;
-                    viewModel.Reports = viewModel.Projects.Where(i => i.ProjectID == id.Value).Single().Reports;
+                        //String position = db.Members.Where(a => a.ProjectID == id && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
+                        //ViewBag.Position = position;
+                        ViewBag.ProjectID = id.Value;
+                        viewModel.Reports = viewModel.Projects.Where(i => i.ProjectID == id.Value).SingleOrDefault().Reports;
+                    
                 }
                 else
                 {
@@ -93,7 +110,12 @@ namespace ProjectManagement2.Controllers
         // GET: Project/Create
         public ActionResult Create()
         {
-            return View();
+            Project project = new Project()
+            {
+                ProjectStatus = "Drafted"
+            };
+  
+            return View(project);
         }
 
         // POST: Project/Create
@@ -107,7 +129,7 @@ namespace ProjectManagement2.Controllers
             {
                 db.Projects.Add(project);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = project.ProjectID });
             }
 
             return View(project);
@@ -165,7 +187,28 @@ namespace ProjectManagement2.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Project project = db.Projects.Find(id);
-            db.Projects.Remove(project);
+
+            var report = db.Reports.Where(i => i.ProjectID == id).ToList();
+
+            foreach( var item in report)
+            {
+                item.Opinions.ToList().ForEach(p => db.Opinions.Remove(p));
+                item.Progresses.ToList().ForEach(p => db.Progresses.Remove(p));
+                item.Results.ToList().ForEach(p => db.Results.Remove(p));
+                item.Actions.ToList().ForEach(p => db.Actions.Remove(p));
+            }
+       
+            project.Members.ToList().ForEach(p => db.Members.Remove(p));
+            project.Progresses.ToList().ForEach(p => db.Progresses.Remove(p));
+            project.Results.ToList().ForEach(p => db.Results.Remove(p));
+            project.Tasks.ToList().ForEach(p => db.Tasks.Remove(p));
+            project.Reports.ToList().ForEach(p => db.Reports.Remove(p));
+
+
+
+            db.Entry(project).State = EntityState.Deleted;
+
+            //db.Projects.Remove(project);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

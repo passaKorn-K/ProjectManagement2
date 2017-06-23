@@ -29,12 +29,14 @@ namespace ProjectManagement2.Controllers
             {
 
                 {
-                    var obj = db.Members.Where(a => a.User.Username.Equals(objUser.Username) && a.User.Password.Equals(objUser.Password)).FirstOrDefault();
+                    var obj = db.Users.Where(a => a.Username.Equals(objUser.Username) && a.Password.Equals(objUser.Password)).FirstOrDefault();
+                    //var obj = db.Members.Where(a => a.User.Username.Equals(objUser.Username) && a.User.Password.Equals(objUser.Password)).FirstOrDefault();
                     //var obj = db.Users.Include(i => i.Members).Where(a => a.Username.Equals(objUser.Username) && a.Password.Equals(objUser.Password)).FirstOrDefault();
                     if (obj != null)
                     {
                         Session["UserID"] = obj.UserID.ToString();
-                        Session["Username"] = obj.User.Username.ToString();
+                        Session["UserName"] = obj.Username.ToString();
+                        Session["FullName"] = obj.FullName.ToString();
                         //Session["Position"] = obj.MemberPosition.ToString();
 
                         return RedirectToAction("Index", "Project");

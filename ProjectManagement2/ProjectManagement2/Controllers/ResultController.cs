@@ -61,7 +61,7 @@ namespace ProjectManagement2.Controllers
             {
                 db.Results.Add(result);
                 db.SaveChanges();
-                return RedirectToAction("Details", "Report", new { id = result.ReportID });
+                return RedirectToAction("Details", "Report", new { id = result.ReportID, pid = result.ProjectID });
             }
 
             //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", result.ProjectID);

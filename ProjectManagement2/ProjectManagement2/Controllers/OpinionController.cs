@@ -37,11 +37,18 @@ namespace ProjectManagement2.Controllers
         }
 
         // GET: Opinion/Create
-        public ActionResult Create()
+        public ActionResult Create(int mid, int rid, DateTime date)
         {
-            ViewBag.MemberID = new SelectList(db.Members, "MemberID", "MemberPosition");
-            ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName");
-            return View();
+            //ViewBag.MemberID = new SelectList(db.Members, "MemberID", "MemberPosition");
+            //ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName");
+            Opinion op = new Opinion()
+            {
+                MemberID = mid,
+                ReportID = rid,
+                DateCreated = date
+                
+            };
+            return View(op);
         }
 
         // POST: Opinion/Create
@@ -51,15 +58,19 @@ namespace ProjectManagement2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "OpinionID,ReportID,MemberID,DateCreated,Opinion1")] Opinion opinion)
         {
+
             if (ModelState.IsValid)
             {
                 db.Opinions.Add(opinion);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                int? pid = db.Reports.Where(i => i.ReportID == opinion.ReportID).Select(i => i.ProjectID).FirstOrDefault();
+
+                return RedirectToAction("Index", "Project", new { id = pid, reportID = opinion.ReportID });
             }
 
-            ViewBag.MemberID = new SelectList(db.Members, "MemberID", "MemberPosition", opinion.MemberID);
-            ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName", opinion.ReportID);
+            //ViewBag.MemberID = new SelectList(db.Members, "MemberID", "MemberPosition", opinion.MemberID);
+            //ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName", opinion.ReportID);
             return View(opinion);
         }
 

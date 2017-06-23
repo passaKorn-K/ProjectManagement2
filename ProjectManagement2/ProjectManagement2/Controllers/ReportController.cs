@@ -76,8 +76,16 @@ namespace ProjectManagement2.Controllers
         }
 
         // GET: Report/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, int? pid)
         {
+            var uid = Convert.ToInt32(Session["UserID"]);
+            string position = db.Members.Where(a => a.ProjectID == pid && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
+            int mid = db.Members.Where(a => a.ProjectID == pid && a.UserID == uid).Select(a => a.MemberID).FirstOrDefault();
+            string status = db.Reports.Where(a => a.ReportID == id).Select(a => a.Status).FirstOrDefault();
+
+            ViewBag.UserID = mid;
+            ViewBag.Position = position;
+            ViewBag.Status = status;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -177,9 +185,54 @@ namespace ProjectManagement2.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Report report = db.Reports.Find(id);
-            db.Reports.Remove(report);
+
+            report.Opinions.ToList().ForEach(p => db.Opinions.Remove(p));
+            report.Progresses.ToList().ForEach(p => db.Progresses.Remove(p));
+            report.Results.ToList().ForEach(p => db.Results.Remove(p));
+            report.Actions.ToList().ForEach(p => db.Actions.Remove(p));
+
+            db.Entry(report).State = EntityState.Deleted;
+
+            //var action = db.Actions.Where(i => i.ReportID == id).ToList();
+            //var progress = db.Progresses.Where(i => i.ReportID == id).ToList();
+            //var result = db.Results.Where(i => i.ReportID == id).ToList();
+            //var opinion = db.Opinions.Where(i => i.ReportID == id).ToList();
+
+
+            //foreach (var item in action)
+            //{
+            //    if (item != null)
+            //    {
+
+            //        db.Actions.Remove(item);
+            //    }
+            //}
+
+            //foreach (var item in progress)
+            //{
+            //    if (item != null)
+            //    {
+            //        db.Progresses.Remove(item);
+            //    }
+            //}
+            //foreach (var item in result)
+            //{
+            //    if (item != null)
+            //    {
+            //        db.Results.Remove(item);
+            //    }
+            //}
+            //foreach (var item in opinion)
+            //{
+            //    if (item != null)
+            //    {
+            //        db.Opinions.Remove(item);
+            //    }
+            //}
+
+            //db.Reports.Remove(report);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Project");
         }
 
         protected override void Dispose(bool disposing)

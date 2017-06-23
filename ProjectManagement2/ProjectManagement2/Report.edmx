@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ReportManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="ReportManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Action">
           <Key>
             <PropertyRef Name="ActionID" />
@@ -318,7 +318,8 @@
             <End Role="Task" EntitySet="Task" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ReportManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -369,9 +370,9 @@
           <Property Name="ProgressID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ProgressDetail" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ProjectID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Project" Relationship="Self.FK_Progress_Project" FromRole="Progress" ToRole="Project" />
           <Property Name="ReportID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Report" Relationship="ReportManagementModel.FK_Progress_Report" FromRole="Progress" ToRole="Report" />
+          <NavigationProperty Name="Project" Relationship="Self.FK_Progress_Project" FromRole="Progress" ToRole="Project" />
+          <NavigationProperty Name="Report" Relationship="Self.FK_Progress_Report" FromRole="Progress" ToRole="Report" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
@@ -399,10 +400,10 @@
           <Property Name="CreatedDate" Type="DateTime" Precision="7" />
           <NavigationProperty Name="Actions" Relationship="Self.FK_Action_Report" FromRole="Report" ToRole="Action" />
           <NavigationProperty Name="Opinions" Relationship="Self.FK_Opinion_Report" FromRole="Report" ToRole="Opinion" />
+          <NavigationProperty Name="Progresses" Relationship="Self.FK_Progress_Report" FromRole="Report" ToRole="Progress" />
           <NavigationProperty Name="Project" Relationship="Self.FK_Report_Report" FromRole="Report" ToRole="Project" />
-          <NavigationProperty Name="Progresses" Relationship="ReportManagementModel.FK_Progress_Report" FromRole="Report" ToRole="Progress" />
-          <NavigationProperty Name="Results" Relationship="ReportManagementModel.FK_Result_Report" FromRole="Report" ToRole="Result" />
-          <NavigationProperty Name="Tasks" Relationship="ReportManagementModel.FK_Task_Report" FromRole="Report" ToRole="Task" />
+          <NavigationProperty Name="Results" Relationship="Self.FK_Result_Report" FromRole="Report" ToRole="Result" />
+          <NavigationProperty Name="Tasks" Relationship="Self.FK_Task_Report" FromRole="Report" ToRole="Task" />
         </EntityType>
         <EntityType Name="Result">
           <Key>
@@ -411,9 +412,9 @@
           <Property Name="ResultID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ResultItem" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ProjectID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Project" Relationship="Self.FK_Result_Project" FromRole="Result" ToRole="Project" />
           <Property Name="ReportID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Report" Relationship="ReportManagementModel.FK_Result_Report" FromRole="Result" ToRole="Report" />
+          <NavigationProperty Name="Project" Relationship="Self.FK_Result_Project" FromRole="Result" ToRole="Project" />
+          <NavigationProperty Name="Report" Relationship="Self.FK_Result_Report" FromRole="Result" ToRole="Report" />
         </EntityType>
         <EntityType Name="Task">
           <Key>
@@ -425,9 +426,9 @@
           <Property Name="TaskEndDate" Type="DateTime" Precision="7" />
           <Property Name="TaskType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ProjectID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Project" Relationship="Self.FK_Task_Project" FromRole="Task" ToRole="Project" />
           <Property Name="ReportID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Report" Relationship="ReportManagementModel.FK_Task_Report" FromRole="Task" ToRole="Report" />
+          <NavigationProperty Name="Project" Relationship="Self.FK_Task_Project" FromRole="Task" ToRole="Project" />
+          <NavigationProperty Name="Report" Relationship="Self.FK_Task_Report" FromRole="Task" ToRole="Report" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -439,8 +440,8 @@
           <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Members" Relationship="Self.FK_Member_User" FromRole="User" ToRole="Member" />
           <Property Name="FullName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Members" Relationship="Self.FK_Member_User" FromRole="User" ToRole="Member" />
         </EntityType>
         <Association Name="FK_Action_Member">
           <End Role="Member" Type="Self.Member" Multiplicity="0..1" />
@@ -526,6 +527,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Progress_Report">
+          <End Role="Report" Type="Self.Report" Multiplicity="1" />
+          <End Role="Progress" Type="Self.Progress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportID" />
+            </Principal>
+            <Dependent Role="Progress">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Report_Report">
           <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
           <End Role="Report" Type="Self.Report" Multiplicity="*" />
@@ -559,6 +572,30 @@
             </Principal>
             <Dependent Role="Task">
               <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Result_Report">
+          <End Role="Report" Type="Self.Report" Multiplicity="1" />
+          <End Role="Result" Type="Self.Result" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportID" />
+            </Principal>
+            <Dependent Role="Result">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_Report">
+          <End Role="Report" Type="Self.Report" Multiplicity="1" />
+          <End Role="Task" Type="Self.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportID" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="ReportID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -600,6 +637,10 @@
             <End Role="Project" EntitySet="Projects" />
             <End Role="Progress" EntitySet="Progresses" />
           </AssociationSet>
+          <AssociationSet Name="FK_Progress_Report" Association="Self.FK_Progress_Report">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="Progress" EntitySet="Progresses" />
+          </AssociationSet>
           <AssociationSet Name="FK_Report_Report" Association="Self.FK_Report_Report">
             <End Role="Project" EntitySet="Projects" />
             <End Role="Report" EntitySet="Reports" />
@@ -612,55 +653,15 @@
             <End Role="Project" EntitySet="Projects" />
             <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
-          <AssociationSet Name="FK_Progress_Report" Association="ReportManagementModel.FK_Progress_Report">
-            <End Role="Report" EntitySet="Reports" />
-            <End Role="Progress" EntitySet="Progresses" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Result_Report" Association="ReportManagementModel.FK_Result_Report">
+          <AssociationSet Name="FK_Result_Report" Association="Self.FK_Result_Report">
             <End Role="Report" EntitySet="Reports" />
             <End Role="Result" EntitySet="Results" />
           </AssociationSet>
-          <AssociationSet Name="FK_Task_Report" Association="ReportManagementModel.FK_Task_Report">
+          <AssociationSet Name="FK_Task_Report" Association="Self.FK_Task_Report">
             <End Role="Report" EntitySet="Reports" />
             <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
         </EntityContainer>
-        <Association Name="FK_Progress_Report">
-          <End Type="ReportManagementModel.Report" Role="Report" Multiplicity="1" />
-          <End Type="ReportManagementModel.Progress" Role="Progress" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Report">
-              <PropertyRef Name="ReportID" />
-            </Principal>
-            <Dependent Role="Progress">
-              <PropertyRef Name="ReportID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Result_Report">
-          <End Type="ReportManagementModel.Report" Role="Report" Multiplicity="1" />
-          <End Type="ReportManagementModel.Result" Role="Result" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Report">
-              <PropertyRef Name="ReportID" />
-            </Principal>
-            <Dependent Role="Result">
-              <PropertyRef Name="ReportID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Task_Report">
-          <End Type="ReportManagementModel.Report" Role="Report" Multiplicity="1" />
-          <End Type="ReportManagementModel.Task" Role="Task" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Report">
-              <PropertyRef Name="ReportID" />
-            </Principal>
-            <Dependent Role="Task">
-              <PropertyRef Name="ReportID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -705,10 +706,10 @@
           <EntitySetMapping Name="Progresses">
             <EntityTypeMapping TypeName="ReportManagementModel.Progress">
               <MappingFragment StoreEntitySet="Progress">
-                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
                 <ScalarProperty Name="ProgressID" ColumnName="ProgressID" />
                 <ScalarProperty Name="ProgressDetail" ColumnName="ProgressDetail" />
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -737,36 +738,36 @@
           <EntitySetMapping Name="Results">
             <EntityTypeMapping TypeName="ReportManagementModel.Result">
               <MappingFragment StoreEntitySet="Result">
-                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="ResultItem" ColumnName="ResultItem" />
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="ReportManagementModel.Task">
               <MappingFragment StoreEntitySet="Task">
-                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
                 <ScalarProperty Name="TaskID" ColumnName="TaskID" />
                 <ScalarProperty Name="TaskName" ColumnName="TaskName" />
                 <ScalarProperty Name="TaskStartDate" ColumnName="TaskStartDate" />
                 <ScalarProperty Name="TaskEndDate" ColumnName="TaskEndDate" />
                 <ScalarProperty Name="TaskType" ColumnName="TaskType" />
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="ReportManagementModel.User">
               <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -7,22 +7,20 @@
     string position = ViewBag.Position;
     int pid = ViewBag.ProjectID;
     int rid = ViewBag.ReportID;
+    int uid = ViewBag.UserID;
 
 }
 @*<link rel="stylesheet" type="text/css" href="~/Content/style.css" />*@
 <h2>PROJECT MANAGEMENT</h2>
-@if (position.Equals("Project Manager"))
-{
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-}
-else
+
+  @Html.ActionLink("Create New Project", "Create", null, new { @class = "btn btn-lg btn-info btn3d" })
+
+@*else
 {
     <p>
         @Html.ActionLink("Create New", "Create", "Report")
     </p>
-}
+}*@
 
 <table class="table">
     <tr>
@@ -30,7 +28,7 @@ else
         <th>Project Status</th>
         <th>Project Start Date</th>
         <th>Project End Date</th>
-        <th>Project Member</th>
+        <th>Your Role</th>
     </tr>
 
     @foreach (var item in Model.Projects)
@@ -62,9 +60,9 @@ else
                         }
                     }
                 </td>*@
-            @if (!position.Equals("null") && item.ProjectID == pid)
+            @if (!position.Equals("null") && pid == item.ProjectID)
             {
-            <td>@position</td>
+                <td>@position</td>
             }
             <td align="center">
 
@@ -148,10 +146,10 @@ else
                             </button>
                             <ul class="dropdown-menu">
 
-                                <li>@Html.ActionLink("Approve Report", "Approve", "Action", new { id = item.ReportID }, null)</li>
-                                <li>@Html.ActionLink("Reject Report", "Reject", "Action", new { id = item.ReportID }, null)</li>
-                                <li>@Html.ActionLink("Create Opinion", "Create", "Opinion", new { id = item.ReportID }, null)</li>
-                                <li>@Html.ActionLink("Report Details", "Details", "Report", new { id = item.ReportID }, null) </li>
+                                @*<li>@Html.ActionLink("Approve Report", "Approve", "Action", new { id = item.ReportID }, null)</li>
+                                <li>@Html.ActionLink("Reject Report", "Reject", "Action", new { id = item.ReportID }, null)</li>*@
+                                <li>@Html.ActionLink("Create Opinion", "Create", "Opinion", new { mid = uid ,rid = item.ReportID, date = DateTime.Now}, null)</li>
+                                <li>@Html.ActionLink("Report Details", "Details", "Report", new { id = item.ReportID, pid = item.ProjectID }, null) </li>
                             </ul>
                         </div>
                     }
@@ -165,9 +163,9 @@ else
                             </button>
                             <ul class="dropdown-menu">
 
-                                <li>@Html.ActionLink("Review Report", "Review", "Action", new { id = item.ReportID }, null)</li>
-                                <li>@Html.ActionLink("Create Opinion", "Create", "Opinion", new { id = item.ReportID }, null)</li>
-                                <li>@Html.ActionLink("Report Details", "Details", "Report", new { id = item.ReportID }, null) </li>
+                                @*<li>@Html.ActionLink("Review Report", "Review", "Action", new { id = item.ReportID }, null)</li>*@
+                                <li>@Html.ActionLink("Create Opinion", "Create", "Opinion", new { mid = uid, rid = item.ReportID, date = DateTime.Now }, null)</li>
+                                <li>@Html.ActionLink("Report Details", "Details", "Report", new { id = item.ReportID, pid = item.ProjectID }, null) </li>
                             </ul>
                         </div>
                     }
@@ -180,7 +178,7 @@ else
                                     <span class="glyphicon glyphicon-th-list">  Manage</span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li>@Html.ActionLink("Report Details", "Details", "Report", new { id = item.ReportID }, null) </li>
+                                    <li>@Html.ActionLink("Report Details", "Details", "Report", new { id = item.ReportID, pid = item.ProjectID }, null) </li>
                                 </ul>
                             </div>
                     }
@@ -214,7 +212,7 @@ else
                     @Html.DisplayFor(modelItem => item.Opinion1)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Member.User.FirstName) @Html.DisplayFor(modelItem => item.Member.User.LastName)
+                    @Html.DisplayFor(modelItem => item.Member.User.FullName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelitem => item.Member.MemberPosition)
@@ -232,8 +230,8 @@ else
                                 </button>
                                 <ul class="dropdown-menu">
 
-                                    <li>@Html.ActionLink("Edit Opinion", "Edit", "Opinion", new { id = item.ReportID }, null)</li>
-                                    <li>@Html.ActionLink("Delete Opinion", "Delete", "Opinion", new { id = item.ReportID }, new { onclick = "return confirm('Confirm Delete?');" }) </li>
+                                    <li>@Html.ActionLink("Edit Opinion", "Edit", "Opinion", new { id = item.OpinionID }, null)</li>
+                                    <li>@Html.ActionLink("Delete Opinion", "Delete", "Opinion", new { id = item.OpinionID }, new { onclick = "return confirm('Confirm Delete?');" }) </li>
                                 </ul>
                             </div>
                             break;
@@ -244,8 +242,8 @@ else
                                 </button>
                                 <ul class="dropdown-menu">
 
-                                    <li>@Html.ActionLink("Edit Opinion", "Edit", "Opinion", new { id = item.ReportID }, null)</li>
-                                    <li>@Html.ActionLink("Delete Opinion", "Delete", "Opinion", new { id = item.ReportID }, new { onclick = "return confirm('Confirm Delete?');" }) </li>
+                                    <li>@Html.ActionLink("Edit Opinion", "Edit", "Opinion", new { id = item.OpinionID}, null)</li>
+                                    <li>@Html.ActionLink("Delete Opinion", "Delete", "Opinion", new { id = item.OpinionID }, new { onclick = "return confirm('Confirm Delete?');" }) </li>
                                 </ul>
                             </div>
                             break;

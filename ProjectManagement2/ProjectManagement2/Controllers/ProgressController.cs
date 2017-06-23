@@ -62,7 +62,7 @@ namespace ProjectManagement2.Controllers
                 db.Progresses.Add(progress);
                 db.SaveChanges();
                 //return RedirectToAction("Index");
-                return RedirectToAction("Details", "Report", new { id = progress.ReportID });
+                return RedirectToAction("Details", "Report", new { id = progress.ReportID, pid = progress.ProjectID });
 
             }
 

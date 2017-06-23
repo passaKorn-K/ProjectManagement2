@@ -37,11 +37,17 @@ namespace ProjectManagement2.Controllers
         }
 
         // GET: Task/Create
-        public ActionResult Create()
+        public ActionResult Create(int rid, int pid)
         {
-            ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName");
-            ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName");
-            return View();
+            Task task = new Task()
+            {
+                ReportID = rid,
+                ProjectID = pid
+
+            };
+            //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName");
+            //ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName");
+            return View(task);
         }
 
         // POST: Task/Create
@@ -55,7 +61,7 @@ namespace ProjectManagement2.Controllers
             {
                 db.Tasks.Add(task);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Report", new { id = task.ReportID, pid = task.ProjectID });
             }
 
             ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", task.ProjectID);

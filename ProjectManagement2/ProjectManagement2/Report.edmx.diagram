@@ -4,16 +4,16 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="4aae8f5db1c04ff48ffc823b15b92157" Name="Diagram1" ZoomLevel="64">
-        <EntityTypeShape EntityType="ReportManagementModel.Action" Width="1.5" PointX="8.25" PointY="10" IsExpanded="true" />
-        <EntityTypeShape EntityType="ReportManagementModel.Member" Width="1.5" PointX="6" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ReportManagementModel.Opinion" Width="1.5" PointX="11.25" PointY="10" IsExpanded="true" />
-        <EntityTypeShape EntityType="ReportManagementModel.Progress" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ReportManagementModel.Project" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ReportManagementModel.Report" Width="1.5" PointX="3" PointY="11.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ReportManagementModel.Result" Width="1.5" PointX="3" PointY="14.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ReportManagementModel.Task" Width="1.5" PointX="3" PointY="17" IsExpanded="true" />
-        <EntityTypeShape EntityType="ReportManagementModel.User" Width="1.5" PointX="3.75" PointY="5" IsExpanded="true" />
+      <Diagram DiagramId="a6c5884584274e4ea59030eb4c209d88" Name="Diagram1">
+        <EntityTypeShape EntityType="ReportManagementModel.Action" Width="1.5" PointX="5.25" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportManagementModel.Member" Width="1.5" PointX="3" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportManagementModel.Opinion" Width="1.5" PointX="8.25" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportManagementModel.Progress" Width="1.5" PointX="5.25" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportManagementModel.Project" Width="1.5" PointX="0.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportManagementModel.Report" Width="1.5" PointX="3" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportManagementModel.Result" Width="1.5" PointX="5.25" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportManagementModel.Task" Width="1.5" PointX="8.25" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReportManagementModel.User" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
         <AssociationConnector Association="ReportManagementModel.FK_Action_Member" ManuallyRouted="false" />
         <AssociationConnector Association="ReportManagementModel.FK_Action_Report" ManuallyRouted="false" />
         <AssociationConnector Association="ReportManagementModel.FK_Member_Project" ManuallyRouted="false" />
@@ -21,12 +21,12 @@
         <AssociationConnector Association="ReportManagementModel.FK_Opinion_Member" ManuallyRouted="false" />
         <AssociationConnector Association="ReportManagementModel.FK_Opinion_Report" ManuallyRouted="false" />
         <AssociationConnector Association="ReportManagementModel.FK_Progress_Project" ManuallyRouted="false" />
+        <AssociationConnector Association="ReportManagementModel.FK_Progress_Report" ManuallyRouted="false" />
         <AssociationConnector Association="ReportManagementModel.FK_Report_Report" ManuallyRouted="false" />
         <AssociationConnector Association="ReportManagementModel.FK_Result_Project" ManuallyRouted="false" />
         <AssociationConnector Association="ReportManagementModel.FK_Task_Project" ManuallyRouted="false" />
-        <AssociationConnector Association="ReportManagementModel.FK_Progress_Report" />
-        <AssociationConnector Association="ReportManagementModel.FK_Result_Report" />
-        <AssociationConnector Association="ReportManagementModel.FK_Task_Report" />
+        <AssociationConnector Association="ReportManagementModel.FK_Result_Report" ManuallyRouted="false" />
+        <AssociationConnector Association="ReportManagementModel.FK_Task_Report" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

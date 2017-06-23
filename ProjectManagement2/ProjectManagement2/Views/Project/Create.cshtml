@@ -23,13 +23,13 @@
             </div>
         </div>
 
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.LabelFor(model => model.ProjectStatus, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.ProjectStatus, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ProjectStatus, "", new { @class = "text-danger" })
             </div>
-        </div>
+        </div>*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.ProjectStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -46,6 +46,9 @@
                 @Html.ValidationMessageFor(model => model.ProjectEndDate, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        @Html.HiddenFor(a => a.ProjectStatus)
+
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

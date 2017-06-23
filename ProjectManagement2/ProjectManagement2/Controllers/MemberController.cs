@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -37,15 +38,23 @@ namespace ProjectManagement2.Controllers
         }
 
         // GET: Member/Create
-        public ActionResult Create(int pid, int rid)
+        public ActionResult Create(int pid)
         {
             //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName");
             ViewBag.UserID = new SelectList(db.Users, "UserID", "FullName");
-            ViewBag.ReportID = rid;
+
+            Member obj = db.Members.Where(a => a.ProjectID == pid).FirstOrDefault();
+            if(obj == null)
+            {
+                ViewBag.Message = "Please Assign Project to Project Manager";
+
+            }
+
 
             Member member = new Member()
             {
-                ProjectID = pid
+                ProjectID = pid,
+                //ReportID = rid
             };
 
             return View(member);
@@ -58,12 +67,12 @@ namespace ProjectManagement2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "MemberID,MemberPosition,Wages,WorkingHour,TotalWages,ProjectID,UserID")] Member member)
         {
-            int rid = ViewBag.ReportID;
             if (ModelState.IsValid)
             {
+                //Report report = db.Reports.Where(a => a.ProjectID == member.ProjectID).SingleOrDefault();
                 db.Members.Add(member);
                 db.SaveChanges();
-                return RedirectToAction("Detail", "Report", new { id = rid });
+                return RedirectToAction("Details", "Project", new { id = member.ProjectID });
             }
 
             //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", member.ProjectID);

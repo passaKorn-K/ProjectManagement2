@@ -21,25 +21,56 @@ namespace ProjectManagement2.Controllers
         //    Report report = db.Reports.Find(id);
         //    return View(report);
         //}
- 
-    
 
-        public ActionResult Reject(int? id)
+
+        [HttpGet]
+        public ActionResult Reject(int id, int userID, DateTime date)
         {
 
-            var userID = Session["UserID"];
-            var date = DateTime.Now;
-            Report report = db.Reports.Find(id);
-            report.Status = "Rejected";
+
+            Opinion opinion = new Opinion()
+            {
+                ReportID = id,
+                MemberID = userID,
+                DateCreated = date,
+
+            };
+
+            //Report report = db.Reports.Find(id);
+            // Status depend on previous status
+            //report.Status = "Rejected";
 
             //if (ModelState.IsValid)
             //{
-            db.Entry(report).State = EntityState.Modified;
-            db.SaveChanges();
+            //    db.Opinions.Add(opinion);
+            //db.Entry(report).State = EntityState.Modified;
+            //db.SaveChanges();
             //return RedirectToAction("Index");
-            return RedirectToAction("Create", new { id = id, userID = userID, actionName = "Reject", date = date });
+            //return RedirectToAction("Create", new { id = id, userID = userID, actionName = "Reject", date = date });
             //}
-            //return View("Details",report);
+
+            //return View("Details", "Report", new { id = id });
+            return View(opinion);
+        }
+
+        [HttpPost]
+        public ActionResult Reject(Opinion op)
+        {
+            
+            Report report = db.Reports.Find(op.ReportID);
+            // Status depend on previous status
+            report.Status = "Drafted";
+
+            if (ModelState.IsValid)
+            {
+                db.Opinions.Add(op);
+                db.Entry(report).State = EntityState.Modified;
+                db.SaveChanges();
+                //return RedirectToAction("Index");
+                //return RedirectToAction("Create", new { id = id, userID = userID, actionName = "Reject", date = date });
+            }
+
+            return RedirectToAction("Details", "Report", new { id = op.ReportID, pid = report.ProjectID});
         }
         // GET: Action
         public ActionResult Index()
@@ -65,7 +96,7 @@ namespace ProjectManagement2.Controllers
 
         // GET: Action/Create
 
-        public ActionResult Approve(int id, int userID, string actionName, DateTime? date)
+        public ActionResult Activity(int id, int userID, string actionName, DateTime? date)
         {
             Action action = new Action()
             {
@@ -90,7 +121,7 @@ namespace ProjectManagement2.Controllers
             }
             else
             {
-                report.Status = "Error";
+                report.Status = "Drafted";
             }
 
             if (ModelState.IsValid)
@@ -99,10 +130,10 @@ namespace ProjectManagement2.Controllers
                 db.Entry(report).State = EntityState.Modified;
 
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Report", new { id = id, pid = report.ProjectID});
             }
-            ViewBag.MemberID = new SelectList(db.Members, "MemberID", "MemberPosition");
-            ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName");
+            //ViewBag.MemberID = new SelectList(db.Members, "MemberID", "MemberPosition");
+            //ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName");
             return RedirectToAction("Index");
         }
 
