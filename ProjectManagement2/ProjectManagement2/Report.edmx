@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ReportManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ReportManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Action">
           <Key>
             <PropertyRef Name="ActionID" />
@@ -36,6 +36,7 @@
           <Property Name="MemberID" Type="int" />
           <Property Name="DateCreated" Type="datetime2" Precision="7" />
           <Property Name="Opinion" Type="varchar(max)" />
+          <Property Name="Status" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Progress">
           <Key>
@@ -318,8 +319,7 @@
             <End Role="Task" EntitySet="Task" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ReportManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -362,6 +362,7 @@
           <Property Name="Opinion1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Member" Relationship="Self.FK_Opinion_Member" FromRole="Opinion" ToRole="Member" />
           <NavigationProperty Name="Report" Relationship="Self.FK_Opinion_Report" FromRole="Opinion" ToRole="Report" />
+          <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Progress">
           <Key>
@@ -695,6 +696,7 @@
           <EntitySetMapping Name="Opinions">
             <EntityTypeMapping TypeName="ReportManagementModel.Opinion">
               <MappingFragment StoreEntitySet="Opinion">
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="OpinionID" ColumnName="OpinionID" />
                 <ScalarProperty Name="ReportID" ColumnName="ReportID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />

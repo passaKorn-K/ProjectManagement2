@@ -36,6 +36,25 @@ namespace ProjectManagement2.Controllers
             return View(opinion);
         }
 
+        public ActionResult Acknowledge(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Opinion opinion = db.Opinions.Find(id);
+            if (opinion == null)
+            {
+                return HttpNotFound();
+            }
+            opinion.Status = "acknowledge";
+
+            db.Entry(opinion).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "Project", new { id = opinion.Report.ProjectID, reportID = opinion.ReportID });
+
+        }
         // GET: Opinion/Create
         public ActionResult Create(int mid, int rid, DateTime date)
         {
@@ -45,7 +64,8 @@ namespace ProjectManagement2.Controllers
             {
                 MemberID = mid,
                 ReportID = rid,
-                DateCreated = date
+                DateCreated = date,
+                Status = "not acknowledge"
                 
             };
             return View(op);
@@ -56,7 +76,7 @@ namespace ProjectManagement2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "OpinionID,ReportID,MemberID,DateCreated,Opinion1")] Opinion opinion)
+        public ActionResult Create([Bind(Include = "OpinionID,ReportID,MemberID,DateCreated,Opinion1,Status")] Opinion opinion)
         {
 
             if (ModelState.IsValid)
@@ -130,9 +150,11 @@ namespace ProjectManagement2.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Opinion opinion = db.Opinions.Find(id);
+            int? reportID = opinion.ReportID;
+            int? projectID = opinion.Report.ProjectID;
             db.Opinions.Remove(opinion);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Project", new { id = projectID, reportID = reportID });
         }
 
         protected override void Dispose(bool disposing)

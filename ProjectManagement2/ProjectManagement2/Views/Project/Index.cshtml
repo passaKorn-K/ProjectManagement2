@@ -10,6 +10,7 @@
     int uid = ViewBag.UserID;
 
 }
+
 @*<link rel="stylesheet" type="text/css" href="~/Content/style.css" />*@
 <h2>PROJECT MANAGEMENT</h2>
 
@@ -207,7 +208,16 @@
         </tr>
         @foreach (var item in Model.Opinions)
         {
-            <tr>
+            var rowStatus = "";
+            if(item.Status == "not acknowledge")
+            {
+                rowStatus = "danger";
+            }
+            else
+            {
+                rowStatus = "success";
+            }
+            <tr class="@rowStatus">
                 <td>
                     @Html.DisplayFor(modelItem => item.Opinion1)
                 </td>
@@ -247,7 +257,12 @@
                                 </ul>
                             </div>
                             break;
-                        default: // Project manager
+                        case "Project Manager":
+
+                                @Html.ActionLink("Acknowkedge", "Acknowledge", "Opinion", new { id = item.OpinionID }, new { @class = "btn btn-success"});
+
+                            break;
+                        default: // other position
                             break;
                     }
                 </td>
@@ -256,10 +271,15 @@
     </table>
 }
 
-@section scripts{
-    <script type="text/javascript">
+@section Scripts{
+    <script>
         $(document).ready(function () {
 
+            //if (position == 'null' && uid != 1) {
+            //    alert("Failed");
+            //}
+            
+            //alert(@ViewBag.ErrorMessage);
         })
     </script>
 }

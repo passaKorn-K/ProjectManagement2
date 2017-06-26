@@ -10,6 +10,7 @@
     String position = ViewBag.Position;
     int userID = ViewBag.UserID;
     string status = ViewBag.Status;
+    string oStatus = ViewBag.oStatus;
 }
 
 <h2>Details</h2>
@@ -176,7 +177,7 @@
                     @Html.DisplayFor(modelItem => item.ActionName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Member.User.FirstName) @Html.DisplayFor(modelItem => item.Member.User.LastName)
+                    @Html.DisplayFor(modelItem => item.Member.User.FullName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Member.MemberPosition)
@@ -191,7 +192,7 @@
 </div>
 
 @*@if (status.Equals("Drafted") && position.Equals("Project Reviewer"))*@
-@if (status.Equals("Drafted") && position.Equals("Project Reviewer"))
+@if (status.Equals("Submitted") && position.Equals("Project Reviewer") && oStatus.Equals("acknowledge"))
 
     {
     <p>
@@ -199,14 +200,17 @@
         @Html.ActionLink("Reject", "Reject", "Action", new { id = Model.ReportID, userID = userID, date = date }, new { @class = "btn btn-danger btn-lg btn3d" })
     </p>
 }
-else if (status.Equals("Reviewed") && position.Equals("Director"))
+else if (status.Equals("Reviewed") && position.Equals("Director") && oStatus.Equals("acknowledge"))
 {
     <p>
         @Html.ActionLink("Approve", "Activity", "Action", new { id = Model.ReportID, userID = userID, actionName = "Approved", date = date }, new { @class = "btn btn-success btn-lg btn3d" })
         @Html.ActionLink("Reject", "Reject", "Action", new { id = Model.ReportID, userID = userID, date = date }, new { @class = "btn btn-danger btn-lg btn3d" })
     </p>
 }
-else
-{         
+else if (status.Equals("Drafted") && position.Equals("Project Manager") && oStatus.Equals("acknowledge"))
+{
     @Html.ActionLink("Submit", "Activity", "Action", new { id = Model.ReportID, userID = userID, actionName = "Submitted", date = date }, new { @class = "btn btn-success btn-lg btn3d" })
+}
+else 
+{
 }

@@ -72,7 +72,7 @@ namespace ProjectManagement2.Controllers
                 //Report report = db.Reports.Where(a => a.ProjectID == member.ProjectID).SingleOrDefault();
                 db.Members.Add(member);
                 db.SaveChanges();
-                return RedirectToAction("Details", "Project", new { id = member.ProjectID });
+                return RedirectToAction("Index", "Project");
             }
 
             //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", member.ProjectID);

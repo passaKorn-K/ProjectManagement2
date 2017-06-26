@@ -36,26 +36,80 @@ namespace ProjectManagement2.Controllers
                 if (id != null)
                 {
                     //Project must have member
-                    Member member = db.Members.Where(a => a.ProjectID == id).FirstOrDefault();
-                    if(member == null)
+                    Member member = db.Members.Where(a => a.ProjectID == id.Value).FirstOrDefault();
+                    //var member = db.Members.Where(a => a.ProjectID == id.Value).ToList();
+                    var mid = db.Members.Where(a => a.ProjectID == id.Value && a.UserID == uid).Select(a => a.MemberID).FirstOrDefault();
+
+
+                    //foreach( var item in member)
+                    //{
+                    //    //Admin can add member
+                    //    if (item == null && uid == 1)
+                    //    {
+                    //        return RedirectToAction("Create", "Member", new { pid = id });
+                    //    }
+
+                    //    //Non-Admin can't add member
+                    //    else if (item == null && uid != 1)
+                    //    {
+                    //        return Content("Please Contact Admin to Assign Member.");
+                    //    }
+
+                    //    //Member Exist 
+                    //    else if (item != null && item.MemberID == uid)
+                    //    {
+                    //        //return Content("Please Contact Admin to Create role.");
+                    //        String position = db.Members.Where(a => a.ProjectID == id.Value && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
+                    //        ViewBag.Position = position;
+
+
+                    //    }
+                    //    else
+                    //    {
+                    //        id = 0;
+                    //        //String position = db.Members.Where(a => a.ProjectID == id && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
+                    //        ViewBag.Position = "null";
+                    //        ViewBag.ProjectID = id.Value;
+                    //    }
+                    //}
+
+                    if (member == null && uid == 1)
                     {
                         return RedirectToAction("Create", "Member", new { pid = id });
                     }
 
+                    else if (member == null && uid != 1)
+                    {
+                        return Content("Please Contact Admin to Assign Member.");
+                    }
+
+                    else if (member != null && mid != 0)
+                    {
+                        
+
+                    }
+                    //else
 
                     String position = db.Members.Where(a => a.ProjectID == id.Value && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
-                    if(position == null)
+                    if (position == null && uid == 1)
                     {
                         return RedirectToAction("Create", "Member", new { pid = id });
 
                     }
+                    else if (position == null && uid != 1)
+                    {
+                        //ViewBag.ErrorMessage = "You don't have authorize to access this project";
+                        //return View();
+                        return Content("Please Contact Admin.");
+                    }
 
-
+                    Session["Position"] = position;
+                    //ViewBag.Position = position;
+                   // String position = db.Members.Where(a => a.ProjectID == id && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
                     ViewBag.Position = position;
-                        //String position = db.Members.Where(a => a.ProjectID == id && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
-                        //ViewBag.Position = position;
-                        ViewBag.ProjectID = id.Value;
-                        viewModel.Reports = viewModel.Projects.Where(i => i.ProjectID == id.Value).SingleOrDefault().Reports;
+                    ViewBag.ProjectID = id.Value;
+
+                    viewModel.Reports = viewModel.Projects.Where(i => i.ProjectID == id.Value).SingleOrDefault().Reports;
                     
                 }
                 else
@@ -99,7 +153,13 @@ namespace ProjectManagement2.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            
             Project project = db.Projects.Find(id);
+
+            //var uid = Convert.ToInt32(Session["UserID"]);
+            //string position = db.Members.Where(a => a.ProjectID == id && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
+            //ViewBag.Position = position;
+
             if (project == null)
             {
                 return HttpNotFound();
@@ -110,12 +170,7 @@ namespace ProjectManagement2.Controllers
         // GET: Project/Create
         public ActionResult Create()
         {
-            Project project = new Project()
-            {
-                ProjectStatus = "Drafted"
-            };
-  
-            return View(project);
+            return View();
         }
 
         // POST: Project/Create
@@ -129,7 +184,7 @@ namespace ProjectManagement2.Controllers
             {
                 db.Projects.Add(project);
                 db.SaveChanges();
-                return RedirectToAction("Details", new { id = project.ProjectID });
+                return RedirectToAction("Index");
             }
 
             return View(project);

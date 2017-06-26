@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Details";
+    string position = Session["Position"].ToString();
+    
 }
 
 <h2>Details</h2>
@@ -46,8 +48,13 @@
     <table class="table">
         <tr>
             <th>
+                
                 Member
-                @Html.ActionLink("+", "Create", "Member", new { pid = Model.ProjectID }, new { @class = "btn btn-success btn-xs btn3d" })
+                @if (position.Equals("Project Manager"))
+                {
+                    @Html.ActionLink("+", "Create", "Member", new { pid = Model.ProjectID }, new { @class = "btn btn-success btn-xs btn3d" })
+                }
+
             </th>
             <th>Wages</th>
             <th>Working Hours</th>

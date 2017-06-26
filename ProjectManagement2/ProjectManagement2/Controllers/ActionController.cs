@@ -33,6 +33,7 @@ namespace ProjectManagement2.Controllers
                 ReportID = id,
                 MemberID = userID,
                 DateCreated = date,
+                Status = "not acknowledge"
 
             };
 
@@ -70,7 +71,7 @@ namespace ProjectManagement2.Controllers
                 //return RedirectToAction("Create", new { id = id, userID = userID, actionName = "Reject", date = date });
             }
 
-            return RedirectToAction("Details", "Report", new { id = op.ReportID, pid = report.ProjectID});
+            return RedirectToAction("Index", "Project", new { id = op.Report.ProjectID, reportID = op.ReportID });
         }
         // GET: Action
         public ActionResult Index()
@@ -107,7 +108,7 @@ namespace ProjectManagement2.Controllers
             };
 
             Report report = db.Reports.Find(id);
-            if (actionName.Equals("Rejected") && (report.Status.Equals("Reviewed") || report.Status.Equals("Drafted")))
+            if (actionName.Equals("Rejected") && (report.Status.Equals("Reviewed") || report.Status.Equals("Submitted")))
             {
                 report.Status = "Drafted";
             }
@@ -115,9 +116,13 @@ namespace ProjectManagement2.Controllers
             {
                 report.Status = "Approved";
             }
-            else if (actionName.Equals("Reviewed") && report.Status.Equals("Drafted"))
+            else if (actionName.Equals("Reviewed") && report.Status.Equals("Submitted"))
             {
                 report.Status = "Reviewed";
+            }
+            else if( actionName.Equals("Submitted") && report.Status.Equals("Drafted"))
+            {
+                report.Status = "Submitted";
             }
             else
             {

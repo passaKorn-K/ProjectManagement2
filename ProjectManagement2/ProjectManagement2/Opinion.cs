@@ -19,6 +19,7 @@ namespace ProjectManagement2
         public Nullable<int> MemberID { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public string Opinion1 { get; set; }
+        public string Status { get; set; }
     
         public virtual Member Member { get; set; }
         public virtual Report Report { get; set; }
