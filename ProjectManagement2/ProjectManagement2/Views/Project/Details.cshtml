@@ -2,88 +2,168 @@
 
 @{
     ViewBag.Title = "Details";
-    string position = Session["Position"].ToString();
-    
+    //string position = Session["Position"].ToString();
+    int m = 1;
+
 }
 
 <h2>Details</h2>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
 
-<div>
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                @*<div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>*@
+        </div>
+
+    </div>
+</div>
+<div class="container-fluid">
     <h4>Project</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ProjectName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ProjectName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ProjectStatus)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ProjectStatus)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ProjectStartDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ProjectStartDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ProjectEndDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ProjectEndDate)
-        </dd>
-  </dl>
-
     <table class="table">
         <tr>
-            <th>
-                
-                Member
-                @if (position.Equals("Project Manager"))
-                {
-                    @Html.ActionLink("+", "Create", "Member", new { pid = Model.ProjectID }, new { @class = "btn btn-success btn-xs btn3d" })
-                }
+            <th style="vertical-align:middle; text-align:center"> Project </th>
+            <th style="vertical-align:middle; text-align:center"> Project Status </th>
+            <th style="vertical-align:middle; text-align:center"> Project Start Date </th>
+            <th style="vertical-align:middle; text-align:center"> Project End Date </th>
 
+        </tr>
+        <tr>
+            <td style="vertical-align:middle; text-align:center">
+                @Html.DisplayFor(model => model.ProjectName)
+            </td>
+            <td style="vertical-align:middle; text-align:center">
+                @Html.DisplayFor(model => model.ProjectStatus)
+            </td>
+            <td style="vertical-align:middle; text-align:center">
+                @Html.TextBoxFor(model => model.ProjectStartDate, "{0:dd/MM/yyyy}", new { @class = "my-dateStyle", @readonly = true })
+            </td>
+            <td style="vertical-align:middle; text-align:center">
+                @Html.TextBoxFor(model => model.ProjectEndDate, "{0:dd/MM/yyyy}", new { @class = "my-dateStyle", @readonly = true })
+            </td>
+        </tr>
+    </table>
+
+    <h4>Member</h4>
+    @*<table class="table">
+        <tr>
+            <th style="vertical-align:middle; text-align:center"> Member </th>
+            <th style="vertical-align:middle; text-align:center"> Wages </th>
+            <th style="vertical-align:middle; text-align:center"> Working Hours </th>
+            <th style="vertical-align:middle; text-align:center"> Total </th>
+            <th>
+            @if (position.Equals("Project Manager"))
+            {
+                @Html.ActionLink("+", "Create", "Member", new { pid = Model.ProjectID }, new { @class = "btn btn-success btn-md btn3d" })
+            }
             </th>
-            <th>Wages</th>
-            <th>Working Hours</th>
-            <th>Total</th>
+
 
         </tr>
 
         @foreach (var item in Model.Members)
         {
             <tr>
-                <td>
+                <td style="vertical-align:middle; text-align:center">
                     @Html.DisplayFor(modelItem => item.MemberPosition)
                 </td>
-                <td>
+                <td style="vertical-align:middle; text-align:center">
                     @Html.DisplayFor(modelItem => item.Wages)
                 </td>
-                <td>
+                <td style="vertical-align:middle; text-align:center">
                     @Html.DisplayFor(modelItem => item.WorkingHour)
                 </td>
-                <td>
+                <td style="vertical-align:middle; text-align:center">
                     @Html.DisplayFor(modelItem => item.TotalWages)
                 </td>
             </tr>
         }
+    </table>*@
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="col-xs-3 well" style="vertical-align:middle; text-align:center"><a id="memberMenu"> MEMBER </a></th>
+                <th class="col-xs-3" style="vertical-align:middle; text-align:center">Wages</th>
+                <th class="col-xs-2" style="vertical-align:middle; text-align:center">Working Hours</th>
+                <th class="col-xs-2" style="vertical-align:middle; text-align:center">Total Wages</th>
+                <th class="col-xs-9"></th>
+                <th></th>
+                <th></th>
+                <th class="col-xs-3" style="vertical-align:middle;">@Html.ActionLink("+", "Create", "Member", new { pid = Model.ProjectID }, new { @class = "btn btn-success btn-md btn3d", id = "memberCreate", data_toggle = "modal", data_target = "#myModal" })</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.Members)
+            {
+                <tr>
+                    <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                        @Html.DisplayFor(modelItem => item.MemberPosition)
+                    </td>
+                    <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                        @Html.DisplayFor(modelItem => item.Wages)
+                    </td>
+                    <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                        @Html.DisplayFor(modelItem => item.WorkingHour)
+                    </td>
+                    <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                        @Html.DisplayFor(modelItem => item.TotalWages)
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td>@Html.ActionLink("EDIT", "Edit", "Member", new { id = item.MemberID }, new { @class = "btn btn-warning btn-sm", id = "memberEdit_" + m, data_toggle = "modal", data_target = "#myModal" })</td>
+                    <td>@Html.ActionLink("X", "Delete", "Member", new { id = item.MemberID }, new { @class = "btn btn-danger btn-sm", id = "memberDel_" + m, data_toggle = "modal", data_target = "#myModal" })</td>
+                </tr>
+                m = m + 1;
+            }
+        </tbody>
     </table>
 
+
+
 </div>
-<p>
-   @* @Html.ActionLink("Add Member", "Create", "Member", new { id = id })*@
+@*<p>
+    @Html.ActionLink("Add Member", "Create", "Member", new { id = id })
     @Html.ActionLink("Edit", "Edit", new { id = Model.ProjectID }) |
     @Html.ActionLink("Back to List", "Index")
-</p>
+</p>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+       
+
+            for (var n = 0; n < @m; n++) {
+                $("#memberCreate").hide();
+                $("#memberEdit_" + n).hide();
+                $("#memberDel_" + n).hide();
+            }
+ 
+
+            $("#memberMenu").click(function () {
+                $("#memberMenu").toggleClass("btn btn-lg btn-danger");
+                $("#memberCreate").slideToggle();
+
+                for (var n = 0; n < @m; n++) {
+                    $("#memberEdit_" + n).slideToggle();
+                    $("#memberDel_" + n).slideToggle();
+                }
+
+            })
+
+        })
+    </script>
+}

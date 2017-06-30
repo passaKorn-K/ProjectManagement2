@@ -2,6 +2,9 @@
 
 @{
     ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_ModalLayout.cshtml";
+
+
 }
 
 <h2>Create</h2>
@@ -13,7 +16,7 @@
     
     <div class="form-horizontal">
         <h4>Result</h4>
-        <hr />
+        @*<hr />*@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.ResultItem, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -44,16 +47,16 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-success" />
+                @Html.ActionLink("Back to List", "Edit", "Report", new { id = Model.ReportID, pid = Model.ProjectID }, new { @class = "btn btn-warning" })
+
+
+
+
             </div>
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

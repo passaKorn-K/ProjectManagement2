@@ -94,7 +94,7 @@ namespace ProjectManagement2.Controllers
             {
                 db.Users.Add(user);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Login");
             }
 
             return View(user);
@@ -126,7 +126,7 @@ namespace ProjectManagement2.Controllers
             {
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Login");
             }
             return View(user);
         }
@@ -154,7 +154,7 @@ namespace ProjectManagement2.Controllers
             User user = db.Users.Find(id);
             db.Users.Remove(user);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Login");
         }
 
         protected override void Dispose(bool disposing)

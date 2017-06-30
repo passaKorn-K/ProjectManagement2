@@ -50,7 +50,6 @@ namespace ProjectManagement2.Controllers
 
             }
 
-
             Member member = new Member()
             {
                 ProjectID = pid,
@@ -72,7 +71,7 @@ namespace ProjectManagement2.Controllers
                 //Report report = db.Reports.Where(a => a.ProjectID == member.ProjectID).SingleOrDefault();
                 db.Members.Add(member);
                 db.SaveChanges();
-                return RedirectToAction("Index", "Project");
+                return RedirectToAction("Details", "Project", new { id = member.ProjectID });
             }
 
             //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", member.ProjectID);
@@ -80,6 +79,47 @@ namespace ProjectManagement2.Controllers
             return View(member);
         }
 
+        public ActionResult CreateFirst(int pid)
+        {
+            //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName");
+            ViewBag.UserID = new SelectList(db.Users, "UserID", "FullName");
+
+            Member obj = db.Members.Where(a => a.ProjectID == pid).FirstOrDefault();
+            if (obj == null)
+            {
+                ViewBag.Message = "Please Assign Project to Project Manager";
+
+            }
+
+
+            Member member = new Member()
+            {
+                ProjectID = pid,
+                //ReportID = rid
+            };
+
+            return View(member);
+        }
+
+        // POST: Member/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateFirst([Bind(Include = "MemberID,MemberPosition,Wages,WorkingHour,TotalWages,ProjectID,UserID")] Member member)
+        {
+            if (ModelState.IsValid)
+            {
+                //Report report = db.Reports.Where(a => a.ProjectID == member.ProjectID).SingleOrDefault();
+                db.Members.Add(member);
+                db.SaveChanges();
+                return RedirectToAction("Index", "Project", new { id = member.ProjectID });
+            }
+
+            //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", member.ProjectID);
+            //ViewBag.UserID = new SelectList(db.Users, "UserID", "FirstName", member.UserID);
+            return View(member);
+        }
         // GET: Member/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -92,8 +132,8 @@ namespace ProjectManagement2.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", member.ProjectID);
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "FirstName", member.UserID);
+            //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", member.ProjectID);
+            //ViewBag.UserID = new SelectList(db.Users, "UserID", "FirstName", member.UserID);
             return View(member);
         }
 
@@ -108,11 +148,11 @@ namespace ProjectManagement2.Controllers
             {
                 db.Entry(member).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Project", new { id = member.ProjectID });
             }
-            ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", member.ProjectID);
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "FirstName", member.UserID);
-            return View(member);
+            //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", member.ProjectID);
+            //ViewBag.UserID = new SelectList(db.Users, "UserID", "FirstName", member.UserID);
+            return RedirectToAction("Details", "Project", new { id = member.ProjectID });
         }
 
         // GET: Member/Delete/5
@@ -136,9 +176,10 @@ namespace ProjectManagement2.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Member member = db.Members.Find(id);
+            int pid = member.ProjectID;
             db.Members.Remove(member);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Project", new { id = pid });
         }
 
         protected override void Dispose(bool disposing)

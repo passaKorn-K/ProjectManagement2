@@ -62,14 +62,14 @@ namespace ProjectManagement2.Controllers
                 db.Progresses.Add(progress);
                 db.SaveChanges();
                 //return RedirectToAction("Index");
-                return RedirectToAction("Details", "Report", new { id = progress.ReportID, pid = progress.ProjectID });
+                return RedirectToAction("Edit", "Report", new { id = progress.ReportID, pid = progress.ProjectID });
 
             }
 
             //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", progress.ProjectID);
             //ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName", progress.ReportID);
             //return View(progress);
-            return RedirectToAction("Details", "Report");
+            return RedirectToAction("Edit", "Report", new { id = progress.ReportID, pid = progress.ProjectID });
         }
 
         // GET: Progress/Edit/5
@@ -100,11 +100,11 @@ namespace ProjectManagement2.Controllers
             {
                 db.Entry(progress).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Edit", "Report", new { id = progress.ReportID, pid = progress.ProjectID });
             }
             ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", progress.ProjectID);
             ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName", progress.ReportID);
-            return View(progress);
+            return RedirectToAction("Edit", "Report", new { id = progress.ReportID, pid = progress.ProjectID });
         }
 
         // GET: Progress/Delete/5
@@ -128,9 +128,11 @@ namespace ProjectManagement2.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Progress progress = db.Progresses.Find(id);
+            int rid = progress.ReportID;
+            int pid = progress.ProjectID;
             db.Progresses.Remove(progress);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", "Report", new { id = rid, pid = pid });
         }
 
         protected override void Dispose(bool disposing)

@@ -1,216 +1,288 @@
 ﻿@model ProjectManagement2.Report
 
 @{
+    ViewBag.Title = "Detail";
+
+}
+
+@{
     ViewBag.Title = "Details";
-    //var userID = Session["UserID"];
-    //var userID = Convert.ToInt32(Session["UserID"]);
- 
 
     var date = DateTime.Now;
     String position = ViewBag.Position;
     int userID = ViewBag.UserID;
     string status = ViewBag.Status;
     string oStatus = ViewBag.oStatus;
+
 }
 
-<h2>Details</h2>
 
-<div>
-    <h4>Report for @position</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ReportName)
-        </dt>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
 
-        <dd>
-            @Html.DisplayFor(model => model.ReportName)
-        </dd>
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                @*<div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>*@
+        </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.ProjectName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Project.ProjectName)
-        </dd>
-
-    </dl>
-
-    <table class="table">
-        <tr>
-            <th>
-                Progress Detail
-                @Html.ActionLink("+", "Create", "Progress", new { rid = Model.ReportID, pid = Model.ProjectID }, new { @class = "btn btn-success btn-xs btn3d" })
-            </th>
-            <th></th>
-
-        </tr>
-
-        @foreach (var item in Model.Progresses)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProgressDetail)
-                    @Html.ActionLink("-", "Delete", "Progress", new { id = item.ProgressID }, new { @class = "btn btn-danger btn-xs btn3d" })
-
-
-                </td>
-            </tr>
-
-        }
-
-    </table>
-
-    <table class="table">
-        <tr>
-            <th>
-                Result
-                @Html.ActionLink("+", "Create", "Result", new { rid = Model.ReportID, pid = Model.ProjectID }, new { @class = "btn btn-success btn-xs btn3d" })
-            </th>
-            <th></th>
-
-        </tr>
-
-        @foreach (var item in Model.Results)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ResultItem)
-                </td>
-            </tr>
-        }
-    </table>
-
-    <table class="table">
-        <tr>
-            <th>
-                Member
-                @Html.ActionLink("+", "Create", "Member", new { pid = Model.ProjectID }, new { @class = "btn btn-success btn-xs btn3d" })
-            </th>
-            <th>Wages</th>
-            <th>Working Hours</th>
-            <th>Total</th>
-
-        </tr>
-
-        @foreach (var item in Model.Project.Members)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MemberPosition)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Wages)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.WorkingHour)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TotalWages)
-                </td>
-            </tr>
-        }
-    </table>
-
-    <table class="table">
-        <tr>
-            <th>Task</th>
-            <th>Task Type</th>
-            <th>Task Start Date</th>
-            <th>Task End Date</th>
-            <th></th>
-
-        </tr>
-
-        @foreach (var item in Model.Tasks)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TaskName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TaskType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TaskStartDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TaskEndDate)
-                </td>
-            </tr>
-        }
-    </table>
-
-
-    <table class="table">
-        <tr>
-            <th>Action Name</th>
-            <th>Action By</th>
-            <th>Position</th>
-            <th>Action Date</th>
-            <th></th>
-
-        </tr>
-
-
-        @foreach (var item in Model.Actions)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ActionName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Member.User.FullName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Member.MemberPosition)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ActionDate)
-                </td>
-            </tr>
-        }
-    </table>
-
+    </div>
 </div>
+
+    @*<h4>Report for @position</h4>*@
+    @*@if (position.Equals("Project Manager"))
+        {
+            <button class="btn btn-info" id="editModeBtn">Edit</button>
+        }*@
+
+    <div class="container" style="margin: 20px;">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-primary">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">
+                        <h2 class="panel-title" style="font-size:30px; line-height:40px;">
+                            @Model.ReportName
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        @*<h3>
+                                <button class="btn btn-info" id="editModeBtn">@Model.ReportName</button>
+                            </h3>*@
+                        @*</div>*@
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                @*<h4>Account # 1364672 (current debit:: $356.61)</h4>*@
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-xs-3 well" style="vertical-align:middle; text-align:center"><a id="taskMenu"> TASK </a></th>
+                                            <th class="col-xs-3" style="vertical-align:middle; text-align:center">Task Start Date</th>
+                                            <th class="col-xs-3" style="vertical-align:middle; text-align:center">Task End Date</th>
+                                            <th class="col-xs-3" style="vertical-align:middle; text-align:center">Task Type</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.Tasks)
+                                        {
+                                            <tr>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                                                    @Html.DisplayFor(modelItem => item.TaskName)
+                                                </td>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                                                    @Html.TextBoxFor(modelItem => item.TaskStartDate, "{0:MM/yyyy}", new { @class = "my-dateStyle", @readonly = true })
+                                                </td>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                                                    @Html.TextBoxFor(modelItem => item.TaskEndDate, "{0:MM/yyyy}", new { @class = "my-dateStyle", @readonly = true })
+                                                </td>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                                                    @Html.DisplayFor(modelItem => item.TaskType)
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </li>
+
+                            <li class="list-group-item">
+                                @*<h4>Account # 1364672 (current debit:: $356.61)</h4>*@
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-xs-3 well" style="vertical-align:middle; text-align:center"><a id="statusMenu"> PROJECT STATUS </a></th>
+                                            <th class="col-xs-3"></th>
+                                            <th class="col-xs-3"></th>
+                                            <th class="col-xs-3"></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                                                @Html.DisplayFor(model => model.Project.ProjectStatus)
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </li>
+
+                            <li class="list-group-item">
+                                @*<h4>Account # 1364672 (current debit:: $356.61)</h4>*@
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-xs-3 well" style="vertical-align:middle; text-align:center;"><a id="resultMenu"> RESULT </a></th>
+                                            <th class="col-xs-9"></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.Results)
+                                        {
+                                            <tr>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center;">
+                                                    @Html.DisplayFor(modelItem => item.ResultItem)
+                                                </td>
+                                                <td></td>
+
+                                            </tr>
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </li>
+
+                            <li class="list-group-item">
+                                @*<h4>Progress Detail</h4>*@
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-xs-3 well" style="vertical-align:middle; text-align:center;"><a id="progressMenu"> PROGRESS </a></th>
+                                            <th class="col-xs-9"></th>
+                                            @*<th class="col-xs-2"></th>
+                                            <th class="col-xs-2"></th>*@
+
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.Progresses)
+                                        {
+                                            <tr>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center;"> @Html.DisplayFor(modelItem => item.ProgressDetail)</td>
+                                                <td></td>
+                                                @*<td style="font-size: 16px;">
+                                                        @Html.DisplayFor(modelItem => item.ProgressDetail)
+                                                    </td>*@
+                                            </tr>
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </li>
+
+                            <li class="list-group-item">
+                                @*<h4>Account # 1364672 (current debit:: $356.61)</h4>*@
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-xs-3 well" style="vertical-align:middle; text-align:center"><a id="memberMenu"> MEMBER </a></th>
+                                            <th class="col-xs-3" style="vertical-align:middle; text-align:center">Wages</th>
+                                            <th class="col-xs-3" style="vertical-align:middle; text-align:center">Working Hours</th>
+                                            <th class="col-xs-3" style="vertical-align:middle; text-align:center">Total Wages</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.Project.Members)
+                                        {
+                                            <tr>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                                                    @Html.DisplayFor(modelItem => item.MemberPosition)
+                                                </td>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                                                    @Html.DisplayFor(modelItem => item.Wages)
+                                                </td>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                                                    @Html.DisplayFor(modelItem => item.WorkingHour)
+                                                </td>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                                                    @Html.DisplayFor(modelItem => item.TotalWages)
+                                                </td>                                               
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </li>
+
+                            <li class="list-group-item">
+                                @*<h4>Account # 1364672 (current debit:: $356.61)</h4>*@
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-xs-3 well" style="vertical-align:middle; text-align:center"><a id="actionMenu"> ACTION </a></th>
+                                            <th class="col-xs-2" style="vertical-align:middle; text-align:center">Action By</th>
+                                            <th class="col-xs-2" style="vertical-align:middle; text-align:center">Position</th>
+                                            <th class="col-xs-2" style="vertical-align:middle; text-align:center">Action Date</th>
+                                            <th class="col-xs-3" style="vertical-align:middle; text-align:center">Signature</th>
+
+                                            
+
+                                            @*<th class="col-xs-3" style="vertical-align:middle;">@Html.ActionLink("+", "Create", "Member", new { pid = Model.ProjectID }, new { @class = "btn btn-success btn-md btn3d", id = "memberCreate", data_toggle = "modal", data_target = "#myModal" })</th>*@
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.Actions)
+                                        {
+                                            <tr>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                                                    @Html.DisplayFor(modelItem => item.ActionName)
+                                                </td>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                                                    @Html.DisplayFor(modelItem => item.Member.User.FullName)
+                                                </td>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                                                    @Html.DisplayFor(modelItem => item.Member.MemberPosition)
+                                                </td>
+                                                <td style="font-size: 16px; vertical-align:middle; text-align:center">
+                                                    @Html.TextBoxFor(modelItem => item.ActionDate, "{0:dd/MM/yyyy}", new { @class = "my-dateStyle", @readonly = true })
+                                                </td>
+
+                                                @*<td>@Html.ActionLink("EDIT", "Edit", "Member", new { id = item.MemberID }, new { @class = "btn btn-warning btn-sm", id = "memberEdit_" + m, data_toggle = "modal", data_target = "#myModal" })</td>
+                                                    <td>@Html.ActionLink("X", "Delete", "Member", new { id = item.MemberID }, new { @class = "btn btn-danger btn-sm", id = "memberDel_" + m, data_toggle = "modal", data_target = "#myModal" })</td>*@
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </li>
+
+
+                        </ul>
+                    </div> @*panel-body*@
+                </div> @*panel-primary*@
+            </div>
+        </div>
+    </div>
 
 @*@if (status.Equals("Drafted") && position.Equals("Project Reviewer"))*@
 @if (status.Equals("Submitted") && position.Equals("Project Reviewer") && oStatus.Equals("acknowledge"))
 
-    {
+{
     <p>
         @Html.ActionLink("Reviewed", "Activity", "Action", new { id = Model.ReportID, userID = userID, actionName = "Reviewed", date = date }, new { @class = "btn btn-info btn-lg btn3d" })
-        @Html.ActionLink("Reject", "Reject", "Action", new { id = Model.ReportID, userID = userID, date = date }, new { @class = "btn btn-danger btn-lg btn3d" })
+        @Html.ActionLink("Reject", "Reject", "Action", new { id = Model.ReportID, userID = userID, date = date }, new { @class = "btn btn-danger btn-lg btn3d ",  data_toggle = "modal", data_target = "#myModal" })
     </p>
 }
 else if (status.Equals("Reviewed") && position.Equals("Director") && oStatus.Equals("acknowledge"))
 {
     <p>
         @Html.ActionLink("Approve", "Activity", "Action", new { id = Model.ReportID, userID = userID, actionName = "Approved", date = date }, new { @class = "btn btn-success btn-lg btn3d" })
-        @Html.ActionLink("Reject", "Reject", "Action", new { id = Model.ReportID, userID = userID, date = date }, new { @class = "btn btn-danger btn-lg btn3d" })
+        @Html.ActionLink("Reject", "Reject", "Action", new { id = Model.ReportID, userID = userID, date = date }, new { @class = "btn btn-danger btn-lg btn3d", data_toggle = "modal", data_target = "#myModal" })
     </p>
 }
 else if (status.Equals("Drafted") && position.Equals("Project Manager") && oStatus.Equals("acknowledge"))
 {
     @Html.ActionLink("Submit", "Activity", "Action", new { id = Model.ReportID, userID = userID, actionName = "Submitted", date = date }, new { @class = "btn btn-success btn-lg btn3d" })
 }
-else 
+else
 {
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }

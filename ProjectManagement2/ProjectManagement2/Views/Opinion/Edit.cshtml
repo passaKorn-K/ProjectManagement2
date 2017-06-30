@@ -2,65 +2,114 @@
 
 @{
     ViewBag.Title = "Edit";
+    Layout = null;
 }
 
 <h2>Edit</h2>
 
+<html>
+<head>
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Opinion</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.OpinionID)
+        <div class="form-horizontal">
+            <h4>Opinion</h4>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.OpinionID)
+            @Html.HiddenFor(model => model.ReportID)
+            @Html.HiddenFor(model => model.MemberID)
+            @Html.HiddenFor(model => model.Status)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ReportID, "ReportID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("ReportID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ReportID, "", new { @class = "text-danger" })
+
+
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.ReportID, "ReportID", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("ReportID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ReportID, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.MemberID, "MemberID", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("MemberID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.MemberID, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Opinion1, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Opinion1, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Opinion1, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group required">
+                <label class="col-md-2 control-label">Date Created</label>
+                <div class="col-md-9 inputGroupContainer">
+                    <div class="input-group date" id="startDatePicker">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        <input name="DateCreated" placeholder="dd-MM-yyyy" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.DateCreated, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DateCreated, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DateCreated, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-success" />
+                    @Html.ActionLink("Back to List", "Index", "Project", new { id = Model.Report.ProjectID, reportID = Model.ReportID }, new { @class = "btn btn-warning" })
+
+
+
+
+                </div>
             </div>
         </div>
+    }
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.MemberID, "MemberID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("MemberID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.MemberID, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/moment.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DateCreated, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DateCreated, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DateCreated, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <script type="text/javascript">
+                $(document).ready(function () {
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Opinion1, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Opinion1, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Opinion1, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                    $('#startDatePicker').datetimepicker({
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
+                        viewMode: 'months',
+                        format: 'DD/MM/YYYY'
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+                    })
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+                })
+    </script>
+    }
+
+    </body>
+</html>
+
+    @*<div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>*@
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

@@ -2,65 +2,127 @@
 
 @{
     ViewBag.Title = "Edit";
+    string position = Session["Position"].ToString();
+    Layout = null;
+
 }
 
 <h2>Edit</h2>
+<html>
+<head>
+    <title>Edit</title>
+</head>
+<body>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="container body-content">
+
+                <div class="form-horizontal">
+                    <h4>Project</h4>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.ProjectID)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ProjectName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ProjectName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ProjectStatus, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @*@Html.EditorFor(model => model.ProjectStatus, new { htmlAttributes = new { @class = "form-control" } })*@
+                            <select class="form-control" id="ProjectStatus" name="ProjectStatus">
+                                <option value="">- Please select Project status</option>
+                                <option value="Early">Early</option>
+                                <option value="Late">Late</option>
+                                <option value="On Time">On Time</option>
+
+                            </select>
+                            @Html.ValidationMessageFor(model => model.ProjectStatus, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group required">
+                        <label class="col-md-2 control-label">Project Start Date</label>
+                        <div class="col-md-8 inputGroupContainer">
+                            <div class="input-group date" id="startDatePicker">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                <input name="ProjectStartDate" placeholder="YYYY-MM" class="form-control" type="text">
+                            </div>
+                        </div>
+                    </div>
 
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Project</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ProjectID)
+                    <div class="form-group required">
+                        <label class="col-md-2 control-label">Project End Date</label>
+                        <div class="col-md-8 inputGroupContainer">
+                            <div class="input-group date" id="endDatePicker">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                <input name="ProjectEndDate" placeholder="YYYY-MM" class="form-control" type="text">
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ProjectName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ProjectName, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-success" />
+                            @Html.ActionLink("Back to List", "Index", new { id = Model.ProjectID }, new { @class = "btn btn-warning" })
+
+
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ProjectStatus, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ProjectStatus, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ProjectStatus, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        }
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ProjectStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ProjectStartDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ProjectStartDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/moment.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ProjectEndDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ProjectEndDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ProjectEndDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
+    <script type="text/javascript">
+                $(document).ready(function () {
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+                    $('#startDatePicker').datetimepicker({
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+                        viewMode: 'months',
+                        format: 'YYYY/MM'
+
+                    })
+
+                    $('#endDatePicker').datetimepicker({
+
+                        viewMode: 'months',
+                        format: 'YYYY/MM'
+
+                    })
+
+                    //$("#TaskEndDate").datetimepicker({
+                    //    timeInput: true,
+                    //    timeFormat: "hh:mm tt",
+                    //    timezone: +0,
+                    //    showTimezone: false
+                    //});
+
+                    //var beginDateTime = new Date($('#TaskStartDate').datepicker('getDate'));
+                    //var beginDate_millisec = beginDateTime.getTime();
+
+                    //var endDateTime = new Date($('#TaskEndDate').datepicker('getDate'));
+                    //var endDate_millisec = endDateTime.getTime();
+                })
+    </script>
+
+</body>
+</html>
+
+

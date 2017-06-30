@@ -75,7 +75,7 @@ namespace ProjectManagement2.Controllers
 
                     if (member == null && uid == 1)
                     {
-                        return RedirectToAction("Create", "Member", new { pid = id });
+                        return RedirectToAction("CreateFirst", "Member", new { pid = id });
                     }
 
                     else if (member == null && uid != 1)
@@ -93,7 +93,7 @@ namespace ProjectManagement2.Controllers
                     String position = db.Members.Where(a => a.ProjectID == id.Value && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
                     if (position == null && uid == 1)
                     {
-                        return RedirectToAction("Create", "Member", new { pid = id });
+                        return RedirectToAction("CreateFirst", "Member", new { pid = id });
 
                     }
                     else if (position == null && uid != 1)
@@ -216,7 +216,7 @@ namespace ProjectManagement2.Controllers
             {
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Edit", new { id = project.ProjectID });
             }
             return View(project);
         }

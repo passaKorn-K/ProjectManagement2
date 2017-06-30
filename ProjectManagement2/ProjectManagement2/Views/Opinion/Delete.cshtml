@@ -8,7 +8,7 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Opinion</h4>
+    @*<h4>Opinion</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -43,14 +43,14 @@
             @Html.DisplayFor(model => model.Report.ReportName)
         </dd>
 
-    </dl>
+    </dl>*@
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Delete" class="btn btn-danger" /> 
+            @Html.ActionLink("Back to List", "Index", "Project", new { id = Model.Report.ProjectID, reportID = Model.ReportID }, new { @class = "btn btn-warning" })
         </div>
     }
 </div>

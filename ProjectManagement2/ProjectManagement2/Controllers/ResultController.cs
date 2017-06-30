@@ -61,14 +61,14 @@ namespace ProjectManagement2.Controllers
             {
                 db.Results.Add(result);
                 db.SaveChanges();
-                return RedirectToAction("Details", "Report", new { id = result.ReportID, pid = result.ProjectID });
+                return RedirectToAction("Edit", "Report", new { id = result.ReportID, pid = result.ProjectID });
             }
 
             //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", result.ProjectID);
             //ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName", result.ReportID);
             //return View(result);
 
-            return RedirectToAction("Details", "Report");
+            return RedirectToAction("Edit", "Report", new { id = result.ReportID, pid = result.ProjectID });
         }
 
         // GET: Result/Edit/5
@@ -99,11 +99,11 @@ namespace ProjectManagement2.Controllers
             {
                 db.Entry(result).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Edit", "Report", new { id = result.ReportID, pid = result.ProjectID });
             }
             ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", result.ProjectID);
             ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName", result.ReportID);
-            return View(result);
+            return RedirectToAction("Edit", "Report", new { id = result.ReportID, pid = result.ProjectID });
         }
 
         // GET: Result/Delete/5
@@ -127,9 +127,11 @@ namespace ProjectManagement2.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Result result = db.Results.Find(id);
+            int rid = result.ReportID;
+            int pid = result.ProjectID;
             db.Results.Remove(result);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", "Report", new { id = rid, pid = pid });
         }
 
         protected override void Dispose(bool disposing)

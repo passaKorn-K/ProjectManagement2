@@ -61,12 +61,12 @@ namespace ProjectManagement2.Controllers
             {
                 db.Tasks.Add(task);
                 db.SaveChanges();
-                return RedirectToAction("Details", "Report", new { id = task.ReportID, pid = task.ProjectID });
+                return RedirectToAction("Edit", "Report", new { id = task.ReportID, pid = task.ProjectID });
             }
 
             ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", task.ProjectID);
             ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName", task.ReportID);
-            return View(task);
+            return RedirectToAction("Edit", "Report", new { id = task.ReportID, pid = task.ProjectID });
         }
 
         // GET: Task/Edit/5
@@ -97,11 +97,11 @@ namespace ProjectManagement2.Controllers
             {
                 db.Entry(task).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Edit", "Report", new { id = task.ReportID, pid = task.ProjectID });
             }
             ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", task.ProjectID);
             ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName", task.ReportID);
-            return View(task);
+            return RedirectToAction("Edit", "Report", new { id = task.ReportID, pid = task.ProjectID });
         }
 
         // GET: Task/Delete/5
@@ -125,9 +125,11 @@ namespace ProjectManagement2.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Task task = db.Tasks.Find(id);
+            int rid = task.ReportID;
+            int pid = task.ProjectID;
             db.Tasks.Remove(task);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", "Report", new { id = rid, pid = pid });
         }
 
         protected override void Dispose(bool disposing)

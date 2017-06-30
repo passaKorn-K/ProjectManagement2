@@ -2,82 +2,129 @@
 
 @{
     ViewBag.Title = "Create";
+    Layout = null;
+
 }
 
-<h2>Create</h2>
+<html>
+<head>
+</head>
+    <body>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Task</h4>
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TaskName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.TaskName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TaskName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TaskType, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+
+                        <select class="form-control" id="TaskType" name="TaskType">
+                            <option value="">- Please select Task Type -</option>
+                            <option value="Critical Path">Critical Path</option>
+                            <option value="Non Critical Path">Non Critical Path</option>
+                        </select>
+                    </div>
+                </div>
 
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Task</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.TaskName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TaskName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TaskName, "", new { @class = "text-danger" })
+                @Html.HiddenFor(a => a.ReportID)
+                @Html.HiddenFor(a => a.ProjectID)
+
+
+                <div class="form-group required">
+                    <label class="col-md-2 control-label">Start Date</label>
+                    <div class="col-md-9 inputGroupContainer">
+                        <div class="input-group date" id="startDatePicker">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <input name="TaskStartDate" placeholder="YYYY-MM" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group required">
+                    <label class="col-md-2 control-label">End Date</label>
+                    <div class="col-md-9 inputGroupContainer">
+                        <div class="input-group date" id="endDatePicker">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <input name="TaskEndDate" placeholder="YYYY-MM" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-success" />
+                        @Html.ActionLink("Back to List", "Edit", "Report", new { id = Model.ReportID, pid = Model.ProjectID }, new { @class = "btn btn-warning" })
+
+
+
+
+                    </div>
+                </div>
             </div>
-        </div>
+        }
+        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+        <script src="~/Scripts/moment.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>
+        <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.TaskStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TaskStartDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TaskStartDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        <script type="text/javascript">
+                $(document).ready(function () {
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.TaskEndDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TaskEndDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TaskEndDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                    $('#startDatePicker').datetimepicker({
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.TaskType, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TaskType, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TaskType, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                        viewMode: 'months',
+                        format: 'YYYY/MM'
 
-        @Html.HiddenFor(a => a.ReportID)
-        @Html.HiddenFor(a => a.ProjectID)
+                    })
 
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.ProjectID, "ProjectID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("ProjectID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ProjectID, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                    $('#endDatePicker').datetimepicker({
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ReportID, "ReportID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("ReportID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ReportID, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
+                        viewMode: 'months',
+                        format: 'YYYY/MM'
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
+                    })
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+                    //$("#TaskEndDate").datetimepicker({
+                    //    timeInput: true,
+                    //    timeFormat: "hh:mm tt",
+                    //    timezone: +0,
+                    //    showTimezone: false
+                    //});
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+                    //var beginDateTime = new Date($('#TaskStartDate').datepicker('getDate'));
+                    //var beginDate_millisec = beginDateTime.getTime();
+
+                    //var endDateTime = new Date($('#TaskEndDate').datepicker('getDate'));
+                    //var endDate_millisec = endDateTime.getTime();
+                })
+        </script>
+        }
+
+    </body>
+
+</html>
+
+@*<h2>Create</h2>*@
+
+
+
+
+
+
+
+

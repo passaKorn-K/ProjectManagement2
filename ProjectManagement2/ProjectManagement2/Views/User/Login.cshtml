@@ -7,8 +7,7 @@
 @using (Html.BeginForm("Login", "User", FormMethod.Post))
 {
     <fieldset>
-        <legend> Login </legend>
-        <div id="loader">
+        @*<div id="loader">
             <div class="dot"></div>
             <div class="dot"></div>
             <div class="dot"></div>
@@ -18,7 +17,7 @@
             <div class="dot"></div>
             <div class="dot"></div>
             <div class="lading"></div>
-        </div>
+        </div>*@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
         @if (@ViewBag.Message != null)
@@ -27,7 +26,20 @@
                 @ViewBag.Message
             </div>
         }
-        <table>
+
+        <div class="container">
+        <div class="login-container">
+            <div id="output"></div>
+            <div class="avatar"></div>
+            <div class="form-box">
+                    <input name="Username" type="text" placeholder="username">
+                    <input name="Password"type="password" placeholder="password">
+                    <button id ="btnsubmit" class="btn btn-info btn-block login" type="submit">Login</button>
+            </div>
+        </div>
+
+        </div>
+        @*<table>
             <tr>
                 <td>@Html.LabelFor(a => a.Username)</td>
                 <td>@Html.TextBoxFor(a => a.Username)</td>
@@ -44,17 +56,7 @@
                     @Html.ValidationMessageFor(a => a.Password)
                 </td>
             </tr>
-            @*<tr>
-                    <td>
-                        @Html.LabelFor(a => a.Position)
-                    </td>
-                    <td>
-                        @Html.DropDownList("Position")
-                    </td>
-                    <td>
-                        @Html.ValidationMessageFor(a => a.Position, "", new { @class = "text-danger" })
-                    </td>
-                </tr>*@
+
 
             <tr>
                 <td></td>
@@ -63,17 +65,53 @@
                 </td>
                 <td></td>
             </tr>
-        </table>
+        </table>*@
     </fieldset>
 }
 @section scripts {
 
     <script>
-        $document.ready(function(){
+        $document.ready(function () {
 
-            setTimeout(function(){
-                $("#loader").show();
-            }, 2000);
+
+
+        var textfield = $("input[name=user]");
+        $('button[type="submit"]').click(function (e) {
+            e.preventDefault();
+            //little validation just to check username
+            if (textfield.val() != "") {
+                //$("body").scrollTo("#output");
+                $("#output").addClass("alert alert-success animated fadeInUp").html("Welcome back " + "<span style='text-transform:uppercase'>" + textfield.val() + "</span>");
+                $("#output").removeClass(' alert-danger');
+                $("input").css({
+                    "height": "0",
+                    "padding": "0",
+                    "margin": "0",
+                    "opacity": "0"
+                });
+                //change button text
+                $('button[type="submit"]').html("continue")
+                    .removeClass("btn-info")
+                    .addClass("btn-default").click(function () {
+                        $("input").css({
+                            "height": "auto",
+                            "padding": "10px",
+                            "opacity": "1"
+                        }).val("");
+                    });
+
+                //show avatar
+                $(".avatar").css({
+                    "background-image": "url('http://api.randomuser.me/0.3.2/portraits/women/35.jpg')"
+                });
+            } else {
+                //remove success mesage replaced with error message
+                $("#output").removeClass(' alert alert-success');
+                $("#output").addClass("alert alert-danger animated fadeInUp").html("sorry enter a username ");
+            }
+            //console.log(textfield.val());
+
+
         });
 
     </script>

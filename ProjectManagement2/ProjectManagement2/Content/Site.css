@@ -22,3 +22,10 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.my-dateStyle {
+    outline: none;
+    border: none;
+    vertical-align: middle;
+    text-align: center;
+}

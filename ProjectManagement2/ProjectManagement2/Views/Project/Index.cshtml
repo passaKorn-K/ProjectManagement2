@@ -12,24 +12,39 @@
 }
 
 @*<link rel="stylesheet" type="text/css" href="~/Content/style.css" />*@
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            @*<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                @*<div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>*@
+        </div>
+
+    </div>
+</div>
+
 <h2>PROJECT MANAGEMENT</h2>
 
-  @Html.ActionLink("Create New Project", "Create", null, new { @class = "btn btn-lg btn-info btn3d" })
 
-@*else
-{
-    <p>
-        @Html.ActionLink("Create New", "Create", "Report")
-    </p>
-}*@
+  @Html.ActionLink("Create New Project", "Create", null, new { @class = "btn btn-info btn-lg btn3d", id = "projectCreate", data_toggle = "modal", data_target = "#myModal" })
 
 <table class="table">
     <tr>
-        <th>Project</th>
-        <th>Project Status</th>
-        <th>Project Start Date</th>
-        <th>Project End Date</th>
-        <th>Your Role</th>
+        <th style="vertical-align:middle; text-align:center">Project</th>
+        <th style="vertical-align:middle; text-align:center">Project Status</th>
+        <th style="vertical-align:middle; text-align:center">Project Start Date</th>
+        <th style="vertical-align:middle; text-align:center">Project End Date</th>
+        <th style="vertical-align:middle; text-align:center">Your Role</th>
     </tr>
 
     @foreach (var item in Model.Projects)
@@ -39,19 +54,23 @@
         {
             selectedRow = "success";
         }
+        else
+        {
+            selectedRow = "default";
+        }
 
         <tr class="@selectedRow">
-            <td>
+            <td style="vertical-align:middle; text-align:center">
                 @Html.ActionLink(item.ProjectName, "Index", new { id = item.ProjectID })
             </td>
-            <td>
+            <td style="vertical-align:middle; text-align:center">
                 @Html.DisplayFor(modelItem => item.ProjectStatus)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectStartDate)
+            <td style="vertical-align:middle; text-align:center">
+                @Html.TextBoxFor(modelItem => item.ProjectStartDate, "{0:dd/MM/yyyy}", new { @class = "my-dateStyle", @readonly = true })
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectEndDate)
+            <td style="vertical-align:middle; text-align:center">
+                @Html.TextBoxFor(modelItem => item.ProjectEndDate, "{0:dd/MM/yyyy}", new { @class = "my-dateStyle", @readonly = true })
             </td>
             @*<td>
                     @{
@@ -63,9 +82,9 @@
                 </td>*@
             @if (!position.Equals("null") && pid == item.ProjectID)
             {
-                <td>@position</td>
+                <td style="vertical-align:middle; text-align:center">@position</td>
             }
-            <td align="center">
+            <td style="vertical-align:middle; text-align:center">
 
                 @if (position.Equals("Project Manager") && pid == item.ProjectID)
                 {
@@ -75,11 +94,11 @@
                         </button>
                         <ul class="dropdown-menu">
 
-                            <li>@Html.ActionLink("Create Report", "Create", "Report", new { id = item.ProjectID }, null)</li>
-
-                            <li>@Html.ActionLink("Edit Project", "Edit", new { id = item.ProjectID })</li>
-                            <li>@Html.ActionLink("Project Details", "Details", new { id = item.ProjectID }) </li>
-                            <li>@Html.ActionLink("Delete Project", "Delete", new { id = item.ProjectID }, new { onclick = "return confirm('Confirm Delete?');" })</li>
+                            <li>@Html.ActionLink("Create Report", "Create", "Report", new { id = item.ProjectID }, new { id = "reportCreate", data_toggle = "modal", data_target = "#myModal" })</li>
+                            @*<li>@Html.ActionLink("Add Member", "Create", "Member", new { pid = item.ProjectID }, new { data_toggle = "modal", data_target = "#myModal" })</li>*@
+                            <li>@Html.ActionLink("Edit Project", "Edit", new { id = item.ProjectID }, new { id = "reportEdit", data_toggle = "modal", data_target = "#myModal" })</li>
+                            <li>@Html.ActionLink("Manage Member", "Details", new { id = item.ProjectID }) </li>
+                            <li>@Html.ActionLink("Delete Project", "Delete", new { id = item.ProjectID }, new { data_toggle = "modal", data_target = "#myModal" })</li>
                         </ul>
                     </div>
                 }
@@ -112,10 +131,10 @@
     <h3>Report Related With Project</h3>
     <table class="table">
         <tr>
-            <th>Report Name</th>
-            <th>Report Status</th>
-            <th>Report Created Date</th>
-            <th></th>
+            <th style="vertical-align:middle; text-align:center">Report Name</th>
+            <th style="vertical-align:middle; text-align:center">Report Status</th>
+            <th style="vertical-align:middle; text-align:center">Report Created Date</th>
+            <th style="vertical-align:middle; text-align:center"></th>
         </tr>
 
         @foreach (var item in Model.Reports)
@@ -126,16 +145,16 @@
                 selectedRow = "success";
             }
             <tr class="@selectedRow">
-                <td>
+                <td style="vertical-align:middle; text-align:center">
                     @Html.ActionLink(@item.ReportName, "Index", new { reportID = item.ReportID })
                 </td>
-                <td>
+                <td style="vertical-align:middle; text-align:center">
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                <td style="vertical-align:middle; text-align:center">
+                    @Html.TextBoxFor(modelItem => item.CreatedDate, "{0:dd/MM/yyyy}", new { @class = "my-dateStyle", @readonly = true })
                 </td>
-                <td>
+                <td style="vertical-align:middle; text-align:center">
                     @*@switch (position)
                         {
                             case "Director":*@
@@ -149,7 +168,8 @@
 
                                 @*<li>@Html.ActionLink("Approve Report", "Approve", "Action", new { id = item.ReportID }, null)</li>
                                 <li>@Html.ActionLink("Reject Report", "Reject", "Action", new { id = item.ReportID }, null)</li>*@
-                                <li>@Html.ActionLink("Create Opinion", "Create", "Opinion", new { mid = uid ,rid = item.ReportID, date = DateTime.Now}, null)</li>
+                                @*<li>@Html.ActionLink("Create Opinion", "Create", "Opinion", new { mid = uid ,rid = item.ReportID, date = DateTime.Now}, null)</li>*@
+                                <li>@Html.ActionLink("Edit Report", "Edit", "Report", new { id = item.ReportID, pid = item.ProjectID }, null) </li>
                                 <li>@Html.ActionLink("Report Details", "Details", "Report", new { id = item.ReportID, pid = item.ProjectID }, null) </li>
                             </ul>
                         </div>
@@ -165,7 +185,8 @@
                             <ul class="dropdown-menu">
 
                                 @*<li>@Html.ActionLink("Review Report", "Review", "Action", new { id = item.ReportID }, null)</li>*@
-                                <li>@Html.ActionLink("Create Opinion", "Create", "Opinion", new { mid = uid, rid = item.ReportID, date = DateTime.Now }, null)</li>
+                                @*<li>@Html.ActionLink("Create Opinion", "Reject", "Action", new { userID = uid, id = item.ReportID, date = DateTime.Now }, null)</li>*@
+                                <li>@Html.ActionLink("Edit Report", "Edit", "Report", new { id = item.ReportID, pid = item.ProjectID }, null) </li>                            
                                 <li>@Html.ActionLink("Report Details", "Details", "Report", new { id = item.ReportID, pid = item.ProjectID }, null) </li>
                             </ul>
                         </div>
@@ -179,6 +200,7 @@
                                     <span class="glyphicon glyphicon-th-list">  Manage</span>
                                 </button>
                                 <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Edit Report", "Edit", "Report", new { id = item.ReportID, pid = item.ProjectID }, null) </li>
                                     <li>@Html.ActionLink("Report Details", "Details", "Report", new { id = item.ReportID, pid = item.ProjectID }, null) </li>
                                 </ul>
                             </div>
@@ -200,11 +222,11 @@
     </h3>
     <table class="table">
         <tr>
-            <th>Opinion</th>
-            <th>Created By</th>
-            <th>Position</th>
-            <th>Created Date</th>
-            <th></th>
+            <th style="vertical-align:middle; text-align:center">Opinion</th>
+            <th style="vertical-align:middle; text-align:center">Created By</th>
+            <th style="vertical-align:middle; text-align:center">Position</th>
+            <th style="vertical-align:middle; text-align:center">Created Date</th>
+            <th style="vertical-align:middle; text-align:center"></th>
         </tr>
         @foreach (var item in Model.Opinions)
         {
@@ -218,19 +240,19 @@
                 rowStatus = "success";
             }
             <tr class="@rowStatus">
-                <td>
+                <td style="vertical-align:middle; text-align:center">
                     @Html.DisplayFor(modelItem => item.Opinion1)
                 </td>
-                <td>
+                <td style="vertical-align:middle; text-align:center">
                     @Html.DisplayFor(modelItem => item.Member.User.FullName)
                 </td>
-                <td>
+                <td style="vertical-align:middle; text-align:center">
                     @Html.DisplayFor(modelitem => item.Member.MemberPosition)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateCreated)
+                <td style="vertical-align:middle; text-align:center">
+                    @Html.TextBoxFor(modelItem => item.DateCreated, "{0:dd/MM/yyyy}", new { @class = "my-dateStyle", @readonly = true })
                 </td>
-                <td>
+                <td style="vertical-align:middle; text-align:center">
                     @switch (position)
                     {
                         case "Director":
@@ -240,8 +262,8 @@
                                 </button>
                                 <ul class="dropdown-menu">
 
-                                    <li>@Html.ActionLink("Edit Opinion", "Edit", "Opinion", new { id = item.OpinionID }, null)</li>
-                                    <li>@Html.ActionLink("Delete Opinion", "Delete", "Opinion", new { id = item.OpinionID }, new { onclick = "return confirm('Confirm Delete?');" }) </li>
+                                    <li>@Html.ActionLink("Edit Opinion", "Edit", "Opinion", new { id = item.OpinionID }, new { data_toggle = "modal", data_target = "#myModal" })</li>
+                                    <li>@Html.ActionLink("Delete Opinion", "Delete", "Opinion", new { id = item.OpinionID }, new { data_toggle = "modal", data_target = "#myModal" }) </li>
                                 </ul>
                             </div>
                             break;
@@ -252,8 +274,8 @@
                                 </button>
                                 <ul class="dropdown-menu">
 
-                                    <li>@Html.ActionLink("Edit Opinion", "Edit", "Opinion", new { id = item.OpinionID}, null)</li>
-                                    <li>@Html.ActionLink("Delete Opinion", "Delete", "Opinion", new { id = item.OpinionID }, new { onclick = "return confirm('Confirm Delete?');" }) </li>
+                                    <li>@Html.ActionLink("Edit Opinion", "Edit", "Opinion", new { id = item.OpinionID }, new { data_toggle = "modal", data_target = "#myModal" })</li>
+                                    <li>@Html.ActionLink("Delete Opinion", "Delete", "Opinion", new { id = item.OpinionID }, new { data_toggle = "modal", data_target = "#myModal" }) </li>
                                 </ul>
                             </div>
                             break;

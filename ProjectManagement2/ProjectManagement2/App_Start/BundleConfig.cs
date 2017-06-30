@@ -28,6 +28,7 @@ namespace ProjectManagement2
                       "~/Content/site.css",
                       "~/Content/btn3d.css",
                       "~/Content/loginForm.css",
+                      "~/Content/login.css",
                       "~/Content/loader.css"));
         }
     }

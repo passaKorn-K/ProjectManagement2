@@ -123,13 +123,9 @@ namespace ProjectManagement2.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Report report = db.Reports.Find(id);
+
             Report report = db.Reports.Where(m => m.ReportID == id).FirstOrDefault();
-            //var myreport = db.Reports.Include(i => i.Actions).Where(m => m.ReportID == id).Select(o => new
-            //{
-            //    report = o,
-            //    action = o.Actions.GroupBy(i => i.ActionName).Select(i => i.FirstOrDefault())
-            //}).FirstOrDefault();
+
 
 
             var entry = db.Entry(report);
@@ -176,7 +172,7 @@ namespace ProjectManagement2.Controllers
             {
                 db.Reports.Add(report);
                 db.SaveChanges();
-                return RedirectToAction("Details", new { id = report.ReportID, pid = report.ProjectID });
+                return RedirectToAction("Edit", new { id = report.ReportID, pid = report.ProjectID });
             }
 
             ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", report.ProjectID);
@@ -184,18 +180,86 @@ namespace ProjectManagement2.Controllers
         }
 
         // GET: Report/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? id, int? pid)
         {
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            //Report report = db.Reports.Find(id);
+            //if (report == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", report.ProjectID);
+            //return View(report);
+            var uid = Convert.ToInt32(Session["UserID"]);
+            string position = db.Members.Where(a => a.ProjectID == pid && a.UserID == uid).Select(a => a.MemberPosition).FirstOrDefault();
+            int mid = db.Members.Where(a => a.ProjectID == pid && a.UserID == uid).Select(a => a.MemberID).FirstOrDefault();
+            string status = db.Reports.Where(a => a.ReportID == id).Select(a => a.Status).FirstOrDefault();
+            var oStatus = db.Opinions.Where(a => a.ReportID == id).Select(a => a.Status).ToList();
+
+            if (oStatus.Count() == 0)
+            {
+                ViewBag.oStatus = "acknowledge";
+            }
+            else if (oStatus.Count() >= 1)
+            {
+                var count = 0;
+                foreach (var item in oStatus)
+                {
+
+
+                    if (item.Equals("not acknowledge"))
+                    {
+                        count = count + 1;
+                    }
+
+                    if (count >= 1)
+                    {
+                        ViewBag.oStatus = "not acknowledge";
+                    }
+                    else
+                    {
+                        ViewBag.oStatus = "acknowledge";
+                    }
+
+                }
+            }
+            else
+            {
+                ViewBag.oStatus = "acknowledge";
+            }
+
+            ViewBag.UserID = mid;
+            ViewBag.Position = position;
+            ViewBag.Status = status;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Report report = db.Reports.Find(id);
+
+            Report report = db.Reports.Where(m => m.ReportID == id).FirstOrDefault();
+
+
+
+            var entry = db.Entry(report);
+            entry.Collection(e => e.Actions)
+                 .Query()
+                 //.GroupBy(e => e.ActionName)
+                 //.Select(i => i.OrderByDescending(e => e.ActionDate))
+                 .OrderByDescending(e => e.ActionDate)
+                 .Select(g => g)
+                 .FirstOrDefault();
+            //.SelectMany(g => g)
+
+            //.GroupBy(a => a.ActionName)
+            //.SelectMany(g => g.OrderByDescending(a => a.ActionDate))
+
             if (report == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", report.ProjectID);
             return View(report);
         }
 
@@ -210,7 +274,7 @@ namespace ProjectManagement2.Controllers
             {
                 db.Entry(report).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = report.ReportID, pid = report.ProjectID });
             }
             ViewBag.ProjectID = new SelectList(db.Projects, "ProjectID", "ProjectName", report.ProjectID);
             return View(report);

@@ -60,6 +60,10 @@ namespace ProjectManagement2.Controllers
         {
             //ViewBag.MemberID = new SelectList(db.Members, "MemberID", "MemberPosition");
             //ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName");
+            int? pid = db.Reports.Where(i => i.ReportID == rid).Select(i => i.ProjectID).FirstOrDefault();
+            ViewBag.ProjectID = pid;
+            ViewBag.ReportID = rid;
+
             Opinion op = new Opinion()
             {
                 MemberID = mid,
@@ -91,7 +95,7 @@ namespace ProjectManagement2.Controllers
 
             //ViewBag.MemberID = new SelectList(db.Members, "MemberID", "MemberPosition", opinion.MemberID);
             //ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName", opinion.ReportID);
-            return View(opinion);
+            return RedirectToAction("Index", "Project", new { id = opinion.Report.ProjectID, reportID = opinion.ReportID });
         }
 
         // GET: Opinion/Edit/5
@@ -102,12 +106,13 @@ namespace ProjectManagement2.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Opinion opinion = db.Opinions.Find(id);
+
             if (opinion == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.MemberID = new SelectList(db.Members, "MemberID", "MemberPosition", opinion.MemberID);
-            ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName", opinion.ReportID);
+            //ViewBag.MemberID = new SelectList(db.Members, "MemberID", "MemberPosition", opinion.MemberID);
+            //ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName", opinion.ReportID);
             return View(opinion);
         }
 
@@ -116,17 +121,17 @@ namespace ProjectManagement2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OpinionID,ReportID,MemberID,DateCreated,Opinion1")] Opinion opinion)
+        public ActionResult Edit([Bind(Include = "OpinionID,ReportID,MemberID,DateCreated,Opinion1,Status")] Opinion opinion)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(opinion).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Project");
             }
-            ViewBag.MemberID = new SelectList(db.Members, "MemberID", "MemberPosition", opinion.MemberID);
-            ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName", opinion.ReportID);
-            return View(opinion);
+            //ViewBag.MemberID = new SelectList(db.Members, "MemberID", "MemberPosition", opinion.MemberID);
+            //ViewBag.ReportID = new SelectList(db.Reports, "ReportID", "ReportName", opinion.ReportID);
+            return RedirectToAction("Index", "Project", new { id = opinion.Report.ProjectID, reportID = opinion.ReportID });
         }
 
         // GET: Opinion/Delete/5
@@ -154,7 +159,7 @@ namespace ProjectManagement2.Controllers
             int? projectID = opinion.Report.ProjectID;
             db.Opinions.Remove(opinion);
             db.SaveChanges();
-            return RedirectToAction("Index", "Project", new { id = projectID, reportID = reportID });
+            return RedirectToAction("Index", "Project");
         }
 
         protected override void Dispose(bool disposing)

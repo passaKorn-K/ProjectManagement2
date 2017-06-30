@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_ModalLayout.cshtml";
+
 }
 
 <h2>Edit</h2>
@@ -10,73 +12,138 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Member</h4>
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.MemberID)
-
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.LabelFor(model => model.MemberPosition, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.MemberPosition, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MemberPosition, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.MemberPosition, "", new { @class = "text-danger" })
+                <select class="form-control" id="MemberPosition" name="MemberPosition">
+                    <option value="">- Please select a Position -</option>
+                    <option value="Project Manager">Project Manager</option>
+                    <option value="Project Reviewer">Project Reviewer</option>
+                    <option value="Director">Director</option>
+                    <option value="Programmer">Programmer</option>
+                    <option value="Designer">Designer</option>
+                    <option value="Tester">Tester</option>
+                </select>
             </div>
-        </div>
+        </div>*@
+
+        @Html.HiddenFor(a => a.MemberPosition)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Wages, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Wages, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Wages, "", new { @class = "text-danger" })
+                <input type="text" class="form-control" id="Wages" name="Wages" />
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.WorkingHour, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.WorkingHour, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.WorkingHour, "", new { @class = "text-danger" })
+                <input type="text" class="form-control" id="WorkingHour" name="WorkingHour" />
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.TotalWages, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.TotalWages, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TotalWages, "", new { @class = "text-danger" })
+                <input type="text" class="form-control" id="TotalWages" name="TotalWages" />
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ProjectID, "ProjectID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("ProjectID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ProjectID, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @Html.HiddenFor(a => a.ProjectID)
+        @Html.HiddenFor(a => a.UserID)
+        @Html.HiddenFor(a => a.MemberID)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.UserID, "UserID", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+
+
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.UserID, "MemberName", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("UserID", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.UserID, "", new { @class = "text-danger" })
             </div>
-        </div>
+        </div>*@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-success" />
+                @Html.ActionLink("Back to List", "Details", "Project", new { id = Model.ProjectID }, new { @class = "btn btn-warning" })
+
+
+
+
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('#MemberPosition').change(function () {
+                var selectedPosition = $('#MemberPosition option:selected').val();
+
+                switch (selectedPosition) {
+                    case 'Project Manager':
+                        $('#Wages').val(1000);
+                        break;
+                    case 'Project Reviewer':
+                        $('#Wages').val(1500);
+                        break;
+                    case 'Director':
+                        $('#Wages').val(2000);
+                        break;
+                    case 'Tester':
+                        $('#Wages').val(500);
+                        break;
+                    case 'Programmer':
+                        $('#Wages').val(800);
+                        break;
+                    case 'Designer':
+                        $('#Wages').val(600);
+                        break;
+                    default: $('#Wages').val();
+                }
+
+                var hour = parseFloat($('#WorkingHour').val(), 10);
+                var wage = parseFloat($('#Wages').val(), 10);
+
+                if (wage > 0 && hour > 0) {
+                    $('#TotalWages').val(wage * hour);
+                }
+                else {
+                    $('#TotalWages').val(0);
+
+                }
+            })
+            $('#WorkingHour').on('input', function () {
+                var hour = parseFloat($('#WorkingHour').val(), 10);
+                var wage = parseFloat($('#Wages').val(), 10);
+
+                if (wage > 0 && hour > 0) {
+                    $('#TotalWages').val(wage * hour);
+                }
+                else {
+                    $('#TotalWages').val(0);
+
+                }
+
+            })
+
+
+
+        })
+
+    </script>
 }
